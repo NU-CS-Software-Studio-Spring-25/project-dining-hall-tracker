@@ -1,7 +1,9 @@
-Dining Hall Tracker Team!
-Team Members: 
-Jason Latz
-Taeyoung Lee
+# Dining Hall Tracker Team!
+## Team Members: 
+- Jason Latz
+- Taeyoung Lee
+- Prashant Ghimire
+- Bella Fishman
 
 
 
