@@ -6,12 +6,14 @@
 - Bella Fishman
 
 
-
+## Project Overview
 - Querying Compass Dining API
 - Get nutritional information for each meal
 - Display campus-wide options for meals that are
--   High Protein
--   
+  - High Protein
+  - High Carb
+  - Vegetarian/Vegan
+  - 
 
 
 
