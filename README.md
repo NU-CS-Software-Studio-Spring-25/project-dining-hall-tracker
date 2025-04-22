@@ -1,6 +1,7 @@
 Dining Hall Tracker Team!
 Team Members: 
 Jason Latz
+Taeyoung Lee
 
 
 
