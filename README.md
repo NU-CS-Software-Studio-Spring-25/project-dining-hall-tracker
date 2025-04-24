@@ -18,4 +18,8 @@
 
 Stores data for N amount of time ahead, so that app experience is quicker
 
+
+## MVP Sentence: 
+Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protien dining hall options around campus for the current dining time.
+
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/DBaAVOQl)
