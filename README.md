@@ -1,25 +1,30 @@
 # Dining Hall Tracker Team!
-## Team Members: 
+
+## Team Members:
+
 - Jason Latz
 - Taeyoung Lee
 - Prashant Ghimire
 - Bella Fishman
 
-
 ## Project Overview
+
 - Querying Compass Dining API
 - Get nutritional information for each meal
 - Display campus-wide options for meals that are
+
   - High Protein
   - High Carb
   - Vegetarian/Vegan
- 
+  - Dairy and Dairy
+  - Gluten Free
+
 - Filter out superfluous information
 
 Stores data for N amount of time ahead, so that app experience is quicker
 
+## MVP Info:
 
-## MVP Info: 
 Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
 
 User: Health-Conscious Northwestern Students
@@ -27,6 +32,7 @@ Administrator: 1 NU student or NU employee
 Competing Application: DineOnCampus
 
 Application can:
+
 - filter based on dietary preferences/macronutrient content
 
 Current solutions: Use DineOnCampus and search through macronutrients yourself. (Slow, inefficient)
