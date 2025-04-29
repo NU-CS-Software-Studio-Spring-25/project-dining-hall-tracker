@@ -1,34 +1,24 @@
-# Dining Hall Tracker Team!
-## Team Members: 
-- Jason Latz
-- Taeyoung Lee
-- Prashant Ghimire
-- Bella Fishman
+# README
 
+This README would normally document whatever steps are necessary to get the
+application up and running.
 
-## Project Overview
-- Querying Compass Dining API
-- Get nutritional information for each meal
-- Display campus-wide options for meals that are
-  - High Protein
-  - High Carb
-  - Vegetarian/Vegan
- 
-- Filter out superfluous information
+Things you may want to cover:
 
-Stores data for N amount of time ahead, so that app experience is quicker
+* Ruby version
 
+* System dependencies
 
-## MVP Info: 
-Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
+* Configuration
 
-User: Health-Conscious Northwestern Students
-Administrator: 1 NU student or NU employee
-Competing Application: DineOnCampus
+* Database creation
 
-Application can:
-- filter based on dietary preferences/macronutrient content
+* Database initialization
 
-Current solutions: Use DineOnCampus and search through macronutrients yourself. (Slow, inefficient)
+* How to run the test suite
 
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/DBaAVOQl)
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
