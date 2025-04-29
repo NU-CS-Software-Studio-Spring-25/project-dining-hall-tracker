@@ -1,34 +1,12 @@
-# Dining Hall Tracker Team!
-## Team Members: 
-- Jason Latz
-- Taeyoung Lee
-- Prashant Ghimire
-- Bella Fishman
+# React + Vite
 
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Project Overview
-- Querying Compass Dining API
-- Get nutritional information for each meal
-- Display campus-wide options for meals that are
-  - High Protein
-  - High Carb
-  - Vegetarian/Vegan
- 
-- Filter out superfluous information
+Currently, two official plugins are available:
 
-Stores data for N amount of time ahead, so that app experience is quicker
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Expanding the ESLint configuration
 
-## MVP Info: 
-Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
-
-User: Health-Conscious Northwestern Students
-Administrator: 1 NU student or NU employee
-Competing Application: DineOnCampus
-
-Application can:
-- filter based on dietary preferences/macronutrient content
-
-Current solutions: Use DineOnCampus and search through macronutrients yourself. (Slow, inefficient)
-
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/DBaAVOQl)
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
