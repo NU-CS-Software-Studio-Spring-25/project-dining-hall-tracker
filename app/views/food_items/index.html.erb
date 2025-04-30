@@ -24,7 +24,13 @@
           <td><%= food_item.meal_time %></td>
           <td><%= link_to 'Show', food_item, class: 'btn btn-info btn-sm' %></td>
           <td><%= link_to 'Edit', edit_food_item_path(food_item), class: 'btn btn-warning btn-sm' %></td>
-          <td><%= link_to 'Destroy', food_item, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %></td>
+          <td>
+          <form action="/food_items/<%= food_item.id %>" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+          </form>
+        </td>
         </tr>
       <% end %>
     </tbody>
@@ -52,7 +58,13 @@
           <td><%= food_item.meal_time %></td>
           <td><%= link_to 'Show', food_item, class: 'btn btn-info btn-sm' %></td>
           <td><%= link_to 'Edit', edit_food_item_path(food_item), class: 'btn btn-warning btn-sm' %></td>
-          <td><%= link_to 'Destroy', food_item, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %></td>
+          <td>
+          <form action="/food_items/<%= food_item.id %>" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+          </form>
+        </td>
         </tr>
       <% end %>
     </tbody>
