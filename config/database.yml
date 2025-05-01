@@ -15,7 +15,7 @@ test:
 
 production:
   <<: *default
-  database: fooditems_rvmn
+  database: <%= ENV["RENDER_DB_NAME"] %>
   username: <%= ENV["RENDER_DB_USER"] %>
   password: <%= ENV["RENDER_DB_PASSWORD"] %>
   host: <%= ENV["RENDER_DB_HOST"] %>
