@@ -15,7 +15,7 @@ test:
 
 production:
   <<: *default
-  database: dining_hall_tracker_production
+  database: fooditems_rvmn
   username: <%= ENV["RENDER_DB_USER"] %>
   password: <%= ENV["RENDER_DB_PASSWORD"] %>
   host: <%= ENV["RENDER_DB_HOST"] %>
