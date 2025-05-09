@@ -1,5 +1,17 @@
 # Dining Hall Tracker Team!
 Website: https://project-dining-hall-tracker.onrender.com/
+
+# TODO
+
+- Make the asana
+- Add different dining halls
+- add more db entries
+- commmit more to github
+
+
+
+
+
 ## Team Members: 
 - Jason Latz
 - Taeyoung Lee
