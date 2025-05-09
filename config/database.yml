@@ -3,7 +3,6 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
 
 development:
   <<: *default
@@ -15,8 +14,6 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV["RENDER_DB_NAME"] %>
-  username: <%= ENV["RENDER_DB_USER"] %>
-  password: <%= ENV["RENDER_DB_PASSWORD"] %>
-  host: <%= ENV["RENDER_DB_HOST"] %>
-  port: <%= ENV["RENDER_DB_PORT"] %>
+  database: dining_hall_tracker_production
+  username: dining_hall_tracker
+  password: <%= ENV["DINING_HALL_TRACKER_DATABASE_PASSWORD"] %>

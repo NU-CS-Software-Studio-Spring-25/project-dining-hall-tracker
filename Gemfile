@@ -68,7 +68,7 @@ ruby '3.2.2'
 
 gem 'rails', '~> 8.0.2'
 gem 'sqlite3', '~> 2.6.0', group: :development
-gem 'pg', '~> 1.1', group: :production
+gem 'pg', '~> 1.5.9'
 gem 'puma', '~> 6.0'
 gem 'sprockets-rails'
 gem 'importmap-rails'
@@ -77,6 +77,7 @@ gem 'stimulus-rails'
 gem 'jbuilder'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'bootsnap', require: false
+gem 'faker'
 
 group :development, :test do
   gem 'debug', platforms: %i[mri windows]

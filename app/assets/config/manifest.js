@@ -1,4 +1,5 @@
 //= link_tree ../images
-//= link_directory ../javascripts
-//= link_directory ../stylesheets
-//= link application.js
+//= link_directory ../stylesheets .css
+//= link_tree ../../javascript .js
+//= link_tree ../../../vendor/javascript .js
+//= link controllers/application.js

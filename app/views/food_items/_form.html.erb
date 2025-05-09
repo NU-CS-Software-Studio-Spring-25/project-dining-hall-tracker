@@ -1,36 +1,42 @@
-<%= form_with(model: food_item, local: true) do |form| %>
-    <% if food_item.errors.any? %>
-      <div class="alert alert-danger">
-        <h2><%= pluralize(food_item.errors.count, "error") %> prohibited this food_item from being saved:</h2>
-        <ul>
-          <% food_item.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-  
-    <div class="form-group mb-3">
-      <%= form.label :name, class: 'form-label' %>
-      <%= form.text_field :name, class: 'form-control' %>
-    </div>
-  
-    <div class="form-group mb-3">
-      <%= form.label :protein, class: 'form-label' %>
-      <%= form.number_field :protein, step: :any, class: 'form-control' %>
-    </div>
-  
-    <div class="form-group mb-3">
-      <%= form.label :dining_hall, class: 'form-label' %>
-      <%= form.text_field :dining_hall, class: 'form-control' %>
-    </div>
-  
-    <div class="form-group mb-3">
-      <%= form.label :meal_time, class: 'form-label' %>
-      <%= form.select :meal_time, ['Breakfast', 'Lunch', 'Dinner'], {}, class: 'form-control' %>
-    </div>
-  
-    <div class="form-group">
-      <%= form.submit class: 'btn btn-primary' %>
+<%= form_with(model: food_item) do |form| %>
+  <% if food_item.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(food_item.errors.count, "error") %> prohibited this food item from being saved:</h2>
+      <ul>
+        <% food_item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
+
+  <div class="mb-3">
+    <%= form.label :name, class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :protein_grams, 'Protein (g)', class: 'form-label' %>
+    <%= form.number_field :protein_grams, class: 'form-control', min: 0, step: 0.1 %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :serving_size, class: 'form-label' %>
+    <%= form.text_field :serving_size, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :meal_time, class: 'form-label' %>
+    <%= form.select :meal_time, ['Breakfast', 'Lunch', 'Dinner'], {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :dining_hall_id, 'Dining Hall', class: 'form-label' %>
+    <%= form.collection_select :dining_hall_id, DiningHall.all, :id, :name, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit class: 'btn btn-primary' %>
+    <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+  </div>
+<% end %>

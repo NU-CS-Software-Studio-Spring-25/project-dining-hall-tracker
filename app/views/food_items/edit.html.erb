@@ -1,8 +1,13 @@
-<div class="container mt-4">
-<h1>Edit Food Item</h1>
-
-<%= render 'form', food_item: @food_item %>
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">Edit Food Item</h1>
+        <%= render 'form', food_item: @food_item %>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%= link_to 'Show', @food_item, class: 'btn btn-info mt-3' %>
 <%= link_to 'Back', food_items_path, class: 'btn btn-secondary mt-3' %>
-</div>

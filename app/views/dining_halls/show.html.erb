@@ -1,0 +1,83 @@
+<div class="row mb-4">
+  <div class="col">
+    <ul class="nav nav-tabs mb-3 justify-content-center">
+      <% @dining_halls.each do |hall| %>
+        <li class="nav-item flex-fill text-center">
+          <%= link_to hall.name, dining_hall_path(hall, protein_threshold: @protein_threshold), class: "nav-link #{hall == @dining_hall ? 'active' : ''}" %>
+        </li>
+      <% end %>
+    </ul>
+    <h1><%= @dining_hall.name %>: Dining Options with (> <%= @protein_threshold %>g protein per 100g)</h1>
+    <p class="text-muted">Current threshold: <%= @protein_threshold %>g protein per 100g</p>
+  </div>
+  <div class="col-auto">
+    <div class="input-group">
+      <span class="input-group-text">Protein Threshold (g/100g)</span>
+      <input type="number" id="protein-threshold" class="form-control" value="<%= @protein_threshold %>" min="0">
+    </div>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Protein (g)</th>
+            <th>Serving Size</th>
+            <th class="protein-density">Protein per 100g</th>
+            <th>Meal Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @high_protein_items.each do |item| %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.protein_grams %></td>
+              <td><%= item.serving_size %></td>
+              <td class="protein-density"><%= item.protein_density %></td>
+              <td><%= item.meal_time %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h2>All Menu Items</h2>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Protein (g)</th>
+            <th>Serving Size</th>
+            <th>Meal Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @food_items.each do |item| %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.protein_grams %></td>
+              <td><%= item.serving_size %></td>
+              <td><%= item.meal_time %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.getElementById('protein-threshold').addEventListener('change', function(e) {
+    const threshold = e.target.value;
+    window.location.href = '<%= dining_hall_path(@dining_hall) %>?protein_threshold=' + threshold;
+  });
+<% end %>

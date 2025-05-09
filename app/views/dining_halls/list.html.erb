@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col">
+    <h1>Dining Halls</h1>
+  </div>
+</div>
+
+<div class="row">
+  <% @dining_halls.each do |dining_hall| %>
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title"><%= dining_hall.name %></h5>
+          <p class="card-text"><%= dining_hall.location %></p>
+          <p class="card-text">
+            <small class="text-muted">
+              <%= pluralize(dining_hall.food_items.count, 'item') %> available
+            </small>
+          </p>
+          <%= link_to 'View Menu', dining_hall_path(dining_hall), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div> 

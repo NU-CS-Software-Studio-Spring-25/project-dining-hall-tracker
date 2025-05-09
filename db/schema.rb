@@ -10,13 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_03_29_000000) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_09_214336) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
+  create_table "dining_halls", force: :cascade do |t|
+    t.string "name"
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "food_items", force: :cascade do |t|
     t.string "name"
-    t.decimal "protein"
+    t.decimal "protein_grams"
     t.string "dining_hall"
     t.string "meal_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "serving_size"
+    t.bigint "dining_hall_id", null: false
+    t.float "protein_density"
+    t.index ["dining_hall_id"], name: "index_food_items_on_dining_hall_id"
   end
+
+  add_foreign_key "food_items", "dining_halls"
 end

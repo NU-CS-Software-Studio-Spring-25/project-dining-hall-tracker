@@ -1,0 +1,43 @@
+<div class="row mb-4">
+  <div class="col">
+    <h1>Dining Options with (> <%= @protein_threshold %>g protein per 100g)</h1>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Protein (g)</th>
+            <th>Serving Size</th>
+            <th class="protein-density">Protein per 100g</th>
+            <th>Dining Hall</th>
+            <th>Meal Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @high_protein_items.each do |item| %>
+            <tr>
+              <td><%= item.name %></td>
+              <td><%= item.protein_grams %></td>
+              <td><%= item.serving_size %></td>
+              <td class="protein-density"><%= item.protein_density %></td>
+              <td><%= link_to item.dining_hall.name, dining_hall_path(item.dining_hall) %></td>
+              <td><%= item.meal_time %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  document.getElementById('protein-threshold').addEventListener('change', function(e) {
+    const threshold = e.target.value;
+    window.location.href = '<%= dining_halls_path %>?protein_threshold=' + threshold;
+  });
+<% end %>
