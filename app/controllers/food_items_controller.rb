@@ -36,8 +36,10 @@ class FoodItemsController < ApplicationController
   
     def destroy
       @food_item.destroy
-      redirect_to food_items_url, notice: 'Food item was successfully destroyed.'
+      redirect_to food_items_url, notice: 'Food item was successfully erased.'
     end
+
+    
   
     private
       def set_food_item
