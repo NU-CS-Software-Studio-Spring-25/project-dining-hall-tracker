@@ -35,6 +35,9 @@ Stores data for N amount of time ahead, so that app experience is quicker
 ## Asana Project Tracker:
 https://app.asana.com/1/943239799185976/project/1210211820216053/board/1210211802194778
 
+## FIGMA Model:
+https://www.figma.com/design/eW05PxX9o6PbFHLKNyeEwY/Dining-Hall-Tracker?node-id=243-1&t=ezN2T3Xc8ieCh9y6-1
+
 ## MVP Info: 
 Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
 
