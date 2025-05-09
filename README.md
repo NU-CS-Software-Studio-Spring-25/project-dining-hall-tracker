@@ -32,6 +32,9 @@ Website: https://project-dining-hall-tracker.onrender.com/
 Stores data for N amount of time ahead, so that app experience is quicker
 
 
+## Asana Project Tracker:
+https://app.asana.com/1/943239799185976/project/1210211820216053/board/1210211802194778
+
 ## MVP Info: 
 Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
 
