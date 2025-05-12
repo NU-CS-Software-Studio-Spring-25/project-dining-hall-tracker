@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:5173', 'https://dining-finder-app.herokuapp.com', ENV['FRONTEND_URL']
+    origins 'http://localhost:5173', 'https://dining-finder-app.herokuapp.com', 'https://dining-finder-app-2ddcb907b75f.herokuapp.com'
 
     resource '*',
       headers: :any,
