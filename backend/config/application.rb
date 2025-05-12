@@ -26,5 +26,14 @@ module Backend
 
     # Enable serving of static files
     config.public_file_server.enabled = true
+    
+    # Serve static files from public directory
+    config.public_file_server.headers = {
+      'Cache-Control' => 'public, max-age=3600',
+      'Access-Control-Allow-Origin' => '*'
+    }
+    
+    # Ensure static files are served in production
+    config.serve_static_files = true
   end
 end
