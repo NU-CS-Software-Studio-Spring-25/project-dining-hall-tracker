@@ -1,0 +1,6 @@
+build:
+  languages:
+    - ruby
+    - nodejs
+run:
+  web: bundle exec rails server -p $PORT 

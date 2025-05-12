@@ -1,0 +1,17 @@
+{
+  "name": "dining-hall-tracker",
+  "version": "1.0.0",
+  "description": "Dining hall tracker application with React frontend and Rails API backend",
+  "engines": {
+    "node": "20.x",
+    "npm": "10.x"
+  },
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && cp -r dist/* ../backend/public/",
+    "deploy": "cp -a backend/. .",
+    "postinstall": "npm run build && npm run deploy"
+  },
+  "cacheDirectories": [
+    "frontend/node_modules"
+  ]
+} 

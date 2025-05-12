@@ -8,9 +8,16 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  # API routes
   namespace :api do
     namespace :v1 do
       get 'health', to: 'health#index'
     end
   end
+
+  # Route all other requests to the frontend
+  root 'frontend#index'
+  get '*path', to: 'frontend#index', constraints: ->(request) {
+    !request.xhr? && request.format.html? && !request.path.start_with?('/api/')
+  }
 end
