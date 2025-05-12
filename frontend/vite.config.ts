@@ -10,8 +10,8 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-    // Ensure the build is optimized for production
-    minify: 'terser',
+    // Use esbuild minifier instead of terser
+    minify: 'esbuild',
     // Generate source maps for production
     sourcemap: true,
   },
