@@ -14,5 +14,8 @@
   },
   "cacheDirectories": [
     "frontend/node_modules"
-  ]
+  ],
+  "dependencies": {
+    "vite": "^5.1.6"
+  }
 } 
