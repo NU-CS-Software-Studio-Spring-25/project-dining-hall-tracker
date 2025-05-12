@@ -16,4 +16,45 @@ export const api = {
     }
     return response.json();
   },
+
+  async getDiningHalls() {
+    const response = await fetch(`${API_BASE_URL}/dining_halls`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch dining halls');
+    }
+    return response.json();
+  },
+
+  async getDiningHall(id: number) {
+    const response = await fetch(`${API_BASE_URL}/dining_halls/${id}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch dining hall with id ${id}`);
+    }
+    return response.json();
+  },
+
+  async getMeals(params: { nutrient?: string; amount?: number; dining_hall_id?: number } = {}) {
+    // Build the query string from parameters
+    const queryParams = new URLSearchParams();
+    if (params.nutrient) queryParams.append('nutrient', params.nutrient);
+    if (params.amount) queryParams.append('amount', params.amount.toString());
+    if (params.dining_hall_id) queryParams.append('dining_hall_id', params.dining_hall_id.toString());
+    
+    const queryString = queryParams.toString();
+    const url = `${API_BASE_URL}/meals${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error('Failed to fetch meals');
+    }
+    return response.json();
+  },
+
+  async getMeal(id: number) {
+    const response = await fetch(`${API_BASE_URL}/meals/${id}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch meal with id ${id}`);
+    }
+    return response.json();
+  }
 }; 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnose Browser Errors</title>
+    <script>
+        window.onload = function() {
+            // Instructions for user
+            const instructions = document.getElementById('instructions');
+            instructions.innerHTML = `
+                <p>Please follow these steps:</p>
+                <ol>
+                    <li>Open your React app in the browser (http://localhost:5174/)</li>
+                    <li>Open browser developer tools (Right-click > Inspect or press F12)</li>
+                    <li>Go to the Console tab</li>
+                    <li>Copy all errors and warnings</li>
+                    <li>Paste them back to the assistant</li>
+                </ol>
+            `;
+        }
+    </script>
+</head>
+<body>
+    <h1>React App Error Diagnosis</h1>
+    <div id="instructions"></div>
+</body>
+</html> 
