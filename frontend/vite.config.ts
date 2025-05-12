@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     port: 5173,
   },
-  base: './', // Use relative paths for assets
+  // Use absolute paths in production for proper asset loading
+  base: process.env.NODE_ENV === 'production' ? '/' : '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -18,10 +19,17 @@ export default defineConfig({
     // Ensure assets are properly referenced
     rollupOptions: {
       output: {
-        assetFileNames: 'assets/[name]-[hash][extname]',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'style.css') return 'assets/[name]-[hash][extname]';
+          return 'assets/[name]-[hash][extname]';
+        },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
       },
     },
+    // Ensure we're not including any development-only code
+    target: 'es2015',
+    // Ensure proper chunking
+    chunkSizeWarningLimit: 1000,
   },
 })

@@ -7,11 +7,12 @@
     "npm": "10.x"
   },
   "scripts": {
-    "clean": "rm -rf frontend/dist backend/public/dist backend/public/assets",
-    "build:frontend": "cd frontend && npm install && npm run build",
-    "copy:frontend": "mkdir -p backend/public && cp -r frontend/dist/* backend/public/",
+    "clean": "rm -rf frontend/dist backend/public/dist backend/public/assets backend/public/index.html",
+    "build:frontend": "cd frontend && npm install && NODE_ENV=production npm run build",
+    "copy:frontend": "mkdir -p backend/public && cp -r frontend/dist/* backend/public/ && touch backend/public/.nojekyll",
     "copy:backend": "cp -r backend/* . && rm -rf backend",
-    "deploy": "npm run clean && npm run build:frontend && npm run copy:frontend && npm run copy:backend",
+    "predeploy": "npm run clean",
+    "deploy": "npm run build:frontend && npm run copy:frontend && npm run copy:backend",
     "postinstall": "npm run deploy",
     "start": "bundle exec rails server"
   }
