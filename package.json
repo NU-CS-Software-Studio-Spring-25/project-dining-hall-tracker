@@ -7,8 +7,11 @@
     "npm": "10.x"
   },
   "scripts": {
+    "clean": "rm -rf frontend/dist backend/public/dist backend/public/assets",
     "build:frontend": "cd frontend && npm install && npm run build",
-    "deploy": "npm run build:frontend && cp -r frontend/dist backend/public/ && cp -a backend/. .",
+    "copy:frontend": "mkdir -p backend/public && cp -r frontend/dist/* backend/public/",
+    "copy:backend": "cp -r backend/* . && rm -rf backend",
+    "deploy": "npm run clean && npm run build:frontend && npm run copy:frontend && npm run copy:backend",
     "postinstall": "npm run deploy",
     "start": "bundle exec rails server"
   }
