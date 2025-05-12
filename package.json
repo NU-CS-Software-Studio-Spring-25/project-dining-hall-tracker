@@ -7,7 +7,7 @@
     "npm": "10.x"
   },
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && mkdir -p ../backend/public && cp -r dist/* ../backend/public/",
+    "build": "cd frontend && npm install --legacy-peer-deps && npm run build && mkdir -p ../backend/public && cp -r dist/* ../backend/public/",
     "deploy": "cp -a backend/. .",
     "postinstall": "npm run build && npm run deploy",
     "start": "bundle exec rails server"
