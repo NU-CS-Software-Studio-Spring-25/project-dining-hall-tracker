@@ -7,7 +7,8 @@
     "npm": "10.x"
   },
   "scripts": {
-    "deploy": "cp -a backend/. .",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "deploy": "npm run build:frontend && cp -r frontend/dist backend/public/ && cp -a backend/. .",
     "postinstall": "npm run deploy",
     "start": "bundle exec rails server"
   }
