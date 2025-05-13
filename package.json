@@ -8,12 +8,11 @@
   },
   "cacheDirectories": ["frontend/node_modules"],
   "scripts": {
-    "clean": "rm -rf frontend/dist public",
     "build:frontend": "cd frontend && npm install && NODE_ENV=production npm run build",
     "copy:frontend": "mkdir -p backend/public && cp -r frontend/dist/* backend/public/",
-    "postinstall": "npm run build:frontend && npm run copy:frontend",
-    "start": "cd backend && bundle exec rails server -p ${PORT:-3000}",
-    "heroku-postbuild": "echo 'Frontend build complete'"
+    "create:rails-structure": "mkdir -p tmp/pids",
+    "setup:heroku": "cp -r backend/* . && cp backend/Procfile .",
+    "postinstall": "npm run build:frontend && npm run copy:frontend && npm run create:rails-structure && npm run setup:heroku"
   },
   "dependencies": {}
 } 
