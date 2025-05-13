@@ -30,5 +30,27 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-# Do not ignore public directory which contains built frontend
+# Node modules and build artifacts
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.env*
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Keep the built frontend in public
 !/public/*
+!/public/dist/*
+!/public/assets/*
+!/public/.nojekyll
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

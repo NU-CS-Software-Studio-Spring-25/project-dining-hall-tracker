@@ -14,6 +14,7 @@
     "predeploy": "npm run clean",
     "deploy": "npm run build:frontend && npm run copy:frontend && npm run copy:backend",
     "postinstall": "npm run deploy",
-    "start": "bundle exec rails server"
+    "start": "bundle exec rails server -p ${PORT:-3000}",
+    "heroku-postbuild": "npm run deploy"
   }
 } 
