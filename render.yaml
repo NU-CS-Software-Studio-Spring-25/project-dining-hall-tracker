@@ -1,4 +1,4 @@
- services:
+services:
   - type: web
     name: dining-hall-tracker
     env: ruby
@@ -13,9 +13,34 @@
         value: true
       - key: RAILS_LOG_TO_STDOUT
         value: true
+      - key: RENDER_DB_NAME
+        fromDatabase:
+          name: dining-hall-tracker-db
+          property: database
+      - key: RENDER_DB_USER
+        fromDatabase:
+          name: dining-hall-tracker-db
+          property: user
+      - key: RENDER_DB_PASSWORD
+        fromDatabase:
+          name: dining-hall-tracker-db
+          property: password
+      - key: RENDER_DB_HOST
+        fromDatabase:
+          name: dining-hall-tracker-db
+          property: host
+      - key: RENDER_DB_PORT
+        fromDatabase:
+          name: dining-hall-tracker-db
+          property: port
     plan: free
     disk:
       name: dining-hall-tracker-disk
       mountPath: /rails/storage
       sizeGB: 1
     healthCheckPath: /up
+
+  - type: postgres
+    name: dining-hall-tracker-db
+    plan: free
+    ipAllowList: []
