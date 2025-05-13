@@ -6,16 +6,43 @@
 
 <div class="row mb-4">
   <div class="col">
+    <%= link_to 'New Food Item', new_food_item_path, class: 'btn btn-primary mb-3' %>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Protein (g)</th>
-            <th>Serving Size</th>
-            <th class="protein-density">Protein per 100g</th>
+            <th class="sortable" data-sort="name">
+              Name
+              <% if @sort_by == 'name' %>
+                <i class="bi bi-arrow-<%= @sort_direction == 'asc' ? 'up' : 'down' %>"></i>
+              <% end %>
+            </th>
+            <th class="sortable" data-sort="protein_grams">
+              Protein (g)
+              <% if @sort_by == 'protein_grams' %>
+                <i class="bi bi-arrow-<%= @sort_direction == 'asc' ? 'up' : 'down' %>"></i>
+              <% end %>
+            </th>
+            <th class="sortable" data-sort="serving_size">
+              Serving Size
+              <% if @sort_by == 'serving_size' %>
+                <i class="bi bi-arrow-<%= @sort_direction == 'asc' ? 'up' : 'down' %>"></i>
+              <% end %>
+            </th>
+            <th class="sortable" data-sort="protein_density">
+              Protein per 100g
+              <% if @sort_by == 'protein_density' %>
+                <i class="bi bi-arrow-<%= @sort_direction == 'asc' ? 'up' : 'down' %>"></i>
+              <% end %>
+            </th>
             <th>Dining Hall</th>
-            <th>Meal Time</th>
+            <th class="sortable" data-sort="meal_time">
+              Meal Time
+              <% if @sort_by == 'meal_time' %>
+                <i class="bi bi-arrow-<%= @sort_direction == 'asc' ? 'up' : 'down' %>"></i>
+              <% end %>
+            </th>
+            <th colspan="3">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -27,6 +54,14 @@
               <td class="protein-density"><%= item.protein_density %></td>
               <td><%= link_to item.dining_hall.name, dining_hall_path(item.dining_hall) %></td>
               <td><%= item.meal_time %></td>
+              <td><%= link_to 'Edit', edit_food_item_path(item), class: 'btn btn-warning btn-sm' %></td>
+              <td>
+                <form action="<%= food_item_path(item) %>" method="post">
+                  <input type="hidden" name="_method" value="delete">
+                  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                  <input type="submit" value="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
+                </form>
+              </td>
             </tr>
           <% end %>
         </tbody>
@@ -36,8 +71,41 @@
 </div>
 
 <%= javascript_tag do %>
-  document.getElementById('protein-threshold').addEventListener('change', function(e) {
-    const threshold = e.target.value;
-    window.location.href = '<%= dining_halls_path %>?protein_threshold=' + threshold;
+  document.addEventListener('DOMContentLoaded', function() {
+    // Protein threshold handler
+    document.getElementById('protein-threshold')?.addEventListener('change', function(e) {
+      const threshold = e.target.value;
+      window.location.href = '<%= dining_halls_path %>?protein_threshold=' + threshold;
+    });
+
+    // Sortable headers handler
+    document.querySelectorAll('.sortable').forEach(header => {
+      header.addEventListener('click', function() {
+        const sortBy = this.dataset.sort;
+        let sortDirection = 'desc';
+        
+        if (sortBy === '<%= @sort_by %>') {
+          sortDirection = '<%= @sort_direction %>' === 'desc' ? 'asc' : 'desc';
+        }
+        
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort_by', sortBy);
+        url.searchParams.set('sort_direction', sortDirection);
+        window.location.href = url.toString();
+      });
+    });
   });
 <% end %>
+
+<style>
+  .sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+  .sortable:hover {
+    background-color: #f8f9fa;
+  }
+  .bi {
+    margin-left: 5px;
+  }
+</style>

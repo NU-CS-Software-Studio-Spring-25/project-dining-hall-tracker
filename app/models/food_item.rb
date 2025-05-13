@@ -27,18 +27,27 @@ class FoodItem < ApplicationRecord
   private
 
   def convert_to_grams(serving_size)
-    # Extract number and unit from serving size
-    match = serving_size.match(/^(\d+(?:\.\d+)?)\s*(oz|cup|g|ml)$/i)
-    return nil unless match
+    s = serving_size.strip.downcase
 
-    amount = match[1].to_f
-    unit = match[2].downcase
+    # Try to match a fraction (e.g., "1/2 cup" or "1 / 2 cup")
+    if s =~ /^(\d+)\s*\/\s*(\d+)\s*(oz|cup|g|ml)$/
+      numerator = $1.to_f
+      denominator = $2.to_f
+      amount = numerator / denominator
+      unit = $3
+    # Try to match a decimal or integer (e.g., "0.5 cup", "4 oz")
+    elsif s =~ /^(\d+(?:\.\d+)?)\s*(oz|cup|g|ml)$/
+      amount = $1.to_f
+      unit = $2
+    else
+      return nil
+    end
 
     case unit
     when 'oz'
       amount * 28.35  # 1 oz = 28.35g
     when 'cup'
-      amount * 236.59  # 1 cup = 236.59g (approximate for most foods)
+      amount * 226.8  # 1 cup = 8 oz = 226.8g
     when 'g'
       amount
     when 'ml'
