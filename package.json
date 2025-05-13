@@ -7,16 +7,14 @@
     "npm": "10.x"
   },
   "scripts": {
-    "clean": "rm -rf frontend/dist public/* tmp/public/* backend/public/dist backend/public/assets backend/public/index.html",
+    "clean": "rm -rf frontend/dist public tmp/public backend/public/dist backend/public/assets backend/public/index.html",
     "build:frontend": "cd frontend && npm install && NODE_ENV=production npm run build",
-    "prepare:dirs": "mkdir -p backend/public tmp/backup",
-    "backup:important": "[ -d public ] && cp -r public tmp/backup/ || echo 'No public directory to backup'",
-    "copy:frontend": "cp -r frontend/dist/* backend/public/ && touch backend/public/.nojekyll",
-    "prepare:root": "rm -rf public app bin config db lib log script spec storage test tmp vendor Gemfile* Rakefile config.ru",
-    "copy:backend": "cp -r backend/* . && rm -rf backend",
-    "restore:important": "[ -d tmp/backup/public ] && cp -r tmp/backup/public/* public/ || echo 'No backup to restore'",
-    "predeploy": "npm run clean && npm run backup:important && npm run prepare:dirs",
-    "deploy": "npm run build:frontend && npm run copy:frontend && npm run prepare:root && npm run copy:backend && npm run restore:important",
+    "prepare:backend": "mkdir -p backend/public",
+    "copy:frontend": "cp -r frontend/dist/* backend/public/",
+    "setup:root": "rm -rf public app bin config db lib log script spec storage test tmp vendor Gemfile* Rakefile config.ru",
+    "copy:backend": "cp -r backend/* .",
+    "predeploy": "npm run clean",
+    "deploy": "npm run build:frontend && npm run prepare:backend && npm run copy:frontend && npm run setup:root && npm run copy:backend",
     "postinstall": "npm run deploy",
     "start": "bundle exec rails server -p ${PORT:-3000}",
     "heroku-postbuild": "npm run deploy"
