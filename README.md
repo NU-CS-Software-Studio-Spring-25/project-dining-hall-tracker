@@ -3,25 +3,13 @@ Website: https://project-dining-hall-tracker.onrender.com/
 # README
 
 Heroku: https://dining-finder-app-2ddcb907b75f.herokuapp.com/
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-# TODO
-Things you may want to cover:
-
-- Make the asana
-- Add different dining halls
-- add more db entries
-- commmit more to github
 
 ## Team Members: 
 - Jason Latz
 - Taeyoung Lee
 - Prashant Ghimire
 - Bella Fishman
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
 
 ## Project Overview
 - Querying Compass Dining API
@@ -30,12 +18,6 @@ Things you may want to cover:
   - High Protein
   - High Carb
   - Vegetarian/Vegan
- 
-- Filter out superfluous information
-* Deployment instructions
-
-Stores data for N amount of time ahead, so that app experience is quicker
-
 
 ## Asana Project Tracker:
 https://app.asana.com/1/943239799185976/project/1210211820216053/board/1210211802194778
