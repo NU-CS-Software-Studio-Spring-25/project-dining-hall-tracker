@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'health', to: 'health#index'
       resources :dining_halls, only: [:index, :show]
-      resources :meals, only: [:index, :show]
+      resources :meals
     end
   end
 

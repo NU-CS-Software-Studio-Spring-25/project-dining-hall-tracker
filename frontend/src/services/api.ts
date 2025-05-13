@@ -56,5 +56,48 @@ export const api = {
       throw new Error(`Failed to fetch meal with id ${id}`);
     }
     return response.json();
+  },
+
+  async createMeal(mealData: Omit<import('../types').Meal, 'id' | 'dining_hall'>) {
+    const response = await fetch(`${API_BASE_URL}/meals`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ meal: mealData }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.errors ? errorData.errors.join(', ') : 'Failed to create meal');
+    }
+    return response.json();
+  },
+
+  async updateMeal(id: number, mealData: Partial<Omit<import('../types').Meal, 'id' | 'dining_hall'>>) {
+    const response = await fetch(`${API_BASE_URL}/meals/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ meal: mealData }),
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.errors ? errorData.errors.join(', ') : 'Failed to update meal');
+    }
+    return response.json();
+  },
+
+  async deleteMeal(id: number) {
+    const response = await fetch(`${API_BASE_URL}/meals/${id}`, {
+      method: 'DELETE',
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to delete meal');
+    }
+    return true;
   }
 }; 

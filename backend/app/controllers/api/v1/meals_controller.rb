@@ -27,6 +27,38 @@ module Api
         meal = Meal.find(params[:id])
         render json: meal, include: [:dining_hall]
       end
+
+      def create
+        meal = Meal.new(meal_params)
+        
+        if meal.save
+          render json: meal, include: [:dining_hall], status: :created
+        else
+          render json: { errors: meal.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+
+      def update
+        meal = Meal.find(params[:id])
+        
+        if meal.update(meal_params)
+          render json: meal, include: [:dining_hall]
+        else
+          render json: { errors: meal.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        meal = Meal.find(params[:id])
+        meal.destroy
+        head :no_content
+      end
+
+      private
+
+      def meal_params
+        params.require(:meal).permit(:name, :protein, :carbs, :fat, :fiber, :calories, :serving_size, :dining_hall_id)
+      end
     end
   end
 end 
