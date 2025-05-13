@@ -7,7 +7,7 @@
     "npm": "10.x"
   },
   "scripts": {
-    "clean": "rm -rf frontend/dist backend/public/dist backend/public/assets backend/public/index.html",
+    "clean": "rm -rf frontend/dist backend/public/dist backend/public/assets backend/public/index.html public",
     "build:frontend": "cd frontend && npm install && NODE_ENV=production npm run build",
     "copy:frontend": "mkdir -p backend/public && cp -r frontend/dist/* backend/public/ && touch backend/public/.nojekyll",
     "copy:backend": "cp -r backend/* . && rm -rf backend",
