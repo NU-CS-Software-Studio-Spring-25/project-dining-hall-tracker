@@ -8,6 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+require 'faker'
+
 # Clear existing data
 puts "Clearing existing data..."
 FoodItem.destroy_all
@@ -27,26 +29,14 @@ end
 
 # Create food items
 puts "Creating food items..."
-meal_times = ['Breakfast', 'Lunch', 'Dinner']
-protein_rich_foods = [
-  'Grilled Chicken Breast',
-  'Salmon Fillet',
-  'Turkey Burger',
-  'Black Bean Burger',
-  'Greek Yogurt',
-  'Tofu Stir-Fry',
-  'Quinoa Bowl',
-  'Egg White Omelette'
-]
-
 dining_halls.each do |dining_hall|
   puts "Creating food items for #{dining_hall.name}..."
   40.times do
     FoodItem.create!(
-      name: protein_rich_foods.sample,
+      name: Faker::Food.dish,
       protein_grams: rand(10..40),
-      serving_size: ['4 oz', '6 oz', '8 oz', '1 cup', '1/2 cup'].sample,
-      meal_time: meal_times.sample,
+      serving_size: "#{rand(3..12)} oz",
+      meal_time: ['Breakfast', 'Lunch', 'Dinner'].sample,
       dining_hall: dining_hall
     )
   end
