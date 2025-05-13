@@ -7,14 +7,15 @@
     "npm": "10.x"
   },
   "scripts": {
-    "clean": "rm -rf frontend/dist public tmp/public backend/public/dist backend/public/assets backend/public/index.html",
+    "clean": "rm -rf frontend/dist public tmp/public backend/public",
     "build:frontend": "cd frontend && npm install && NODE_ENV=production npm run build",
     "prepare:backend": "mkdir -p backend/public",
-    "copy:frontend": "cp -r frontend/dist/* backend/public/",
+    "copy:frontend:dist": "mkdir -p backend/public/dist && cp -r frontend/dist/* backend/public/dist/",
+    "copy:frontend:root": "cp -r frontend/dist/* backend/public/",
     "setup:root": "rm -rf public app bin config db lib log script spec storage test tmp vendor Gemfile* Rakefile config.ru",
     "copy:backend": "cp -r backend/* .",
     "predeploy": "npm run clean",
-    "deploy": "npm run build:frontend && npm run prepare:backend && npm run copy:frontend && npm run setup:root && npm run copy:backend",
+    "deploy": "npm run build:frontend && npm run prepare:backend && npm run copy:frontend:dist && npm run copy:frontend:root && npm run setup:root && npm run copy:backend",
     "postinstall": "npm run deploy",
     "start": "bundle exec rails server -p ${PORT:-3000}",
     "heroku-postbuild": "npm run deploy"
