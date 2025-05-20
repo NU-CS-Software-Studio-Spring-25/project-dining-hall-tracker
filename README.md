@@ -25,6 +25,11 @@ https://app.asana.com/1/943239799185976/project/1210211820216053/board/121021180
 ## FIGMA Model:
 https://www.figma.com/design/eW05PxX9o6PbFHLKNyeEwY/Dining-Hall-Tracker?node-id=243-1&t=ezN2T3Xc8ieCh9y6-1
 
+## In Class Interface Feedback
+- Color code table by dining hall
+- or mark high-protien or something in bold
+- dropdown to pick dining hall on table page
+
 ## MVP Info: 
 Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
 
