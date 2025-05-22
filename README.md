@@ -27,7 +27,7 @@ https://www.figma.com/design/eW05PxX9o6PbFHLKNyeEwY/Dining-Hall-Tracker?node-id=
 
 ## In Class Interface Feedback
 - Color code table by dining hall
-- or mark high-protien or something in bold
+- or mark high-protein or something in bold
 - dropdown to pick dining hall on table page
 - search functionality for the table?
   
