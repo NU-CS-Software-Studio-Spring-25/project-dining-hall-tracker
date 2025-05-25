@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider, createTheme, CssBaseline, Alert, Snackbar } from '@mui/material'
 import { api } from './services/api'
 import { NavBar } from './components/NavBar'
 import { HomePage } from './pages/HomePage'
 import { MealsPage } from './pages/MealsPage'
 import { DiningHallsPage } from './pages/DiningHallsPage'
+import { AdminPage } from './pages/AdminPage'
+import { AdminMealsPage } from './pages/AdminMealsPage'
 import './App.css'
 
 console.log('App module is being loaded')
@@ -43,6 +45,33 @@ const theme = createTheme({
 });
 
 console.log('Theme created successfully')
+
+// Protected Route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user is authenticated
+    const checkAuth = () => {
+      const auth = localStorage.getItem('isAuthenticated');
+      setIsAuthenticated(auth === 'true');
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) {
+    return null; // or a loading spinner
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/admin" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 function App() {
   console.log('App component function is executing')
@@ -89,6 +118,15 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/meals" element={<MealsPage />} />
             <Route path="/dining-halls" element={<DiningHallsPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route 
+              path="/admin/meals" 
+              element={
+                <ProtectedRoute>
+                  <AdminMealsPage />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
           <Snackbar open={showApiError} autoHideDuration={6000} onClose={() => setShowApiError(false)}>
             <Alert severity="error" sx={{ width: '100%' }} onClose={() => setShowApiError(false)}>

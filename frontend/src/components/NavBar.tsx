@@ -2,6 +2,8 @@ import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 export const NavBar = () => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -18,6 +20,11 @@ export const NavBar = () => {
           <Button color="inherit" component={Link} to="/dining-halls">
             Dining Halls
           </Button>
+          {isAuthenticated && (
+            <Button color="inherit" component={Link} to="/admin">
+              Admin
+            </Button>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

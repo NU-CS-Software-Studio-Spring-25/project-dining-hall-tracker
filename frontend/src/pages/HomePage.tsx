@@ -1,5 +1,6 @@
-import { Container, Typography, Paper, Box, Button } from '@mui/material';
+import { Container, Typography, Paper, Box, Button, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export const HomePage = () => {
   return (
@@ -31,7 +32,7 @@ export const HomePage = () => {
           </Typography>
         </Box>
         
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mb: 4 }}>
           <Button 
             variant="contained" 
             component={Link} 
@@ -47,6 +48,27 @@ export const HomePage = () => {
             size="large"
           >
             View Dining Halls
+          </Button>
+        </Box>
+
+        <Divider sx={{ my: 4 }} />
+
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>
+            Admin Access
+          </Typography>
+          <Typography variant="body1" color="text.secondary" paragraph>
+            Are you an administrator? Access the admin panel to manage meals and dining halls.
+          </Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            component={Link}
+            to="/admin"
+            startIcon={<AdminPanelSettingsIcon />}
+            size="large"
+          >
+            Go to Admin Panel
           </Button>
         </Box>
       </Paper>
