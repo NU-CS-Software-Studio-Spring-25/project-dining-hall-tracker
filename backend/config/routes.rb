@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,8 +16,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'health', to: 'health#index'
+      get 'auth/me', to: 'auth#me'
       resources :dining_halls, only: [:index, :show]
       resources :meals
+      resources :favorites, only: [:index, :create, :destroy]
     end
   end
 

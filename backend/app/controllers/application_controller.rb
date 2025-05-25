@@ -1,17 +1,14 @@
 class ApplicationController < ActionController::API
-  before_action :authenticate_request, except: [:index, :show]
+  respond_to :json
+
+  # Include Devise helpers
+  include Devise::Controllers::Helpers
 
   private
 
-  def authenticate_request
-    # Get the token from the Authorization header
-    auth_header = request.headers['Authorization']
-    token = auth_header&.split(' ')&.last
-
-    # In a real application, you would verify the token with a proper authentication service
-    # For now, we'll use a simple password check
-    unless token == 'admin123'
-      render json: { error: 'Unauthorized' }, status: :unauthorized
-    end
+  def authenticate_user!
+    super
+  rescue JWT::DecodeError
+    render json: { error: 'Invalid token' }, status: :unauthorized
   end
 end
