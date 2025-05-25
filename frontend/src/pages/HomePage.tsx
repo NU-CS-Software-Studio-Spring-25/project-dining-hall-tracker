@@ -10,13 +10,13 @@ export const HomePage = () => {
           Welcome to the Dining Hall Tracker
         </Typography>
         
-        <Typography variant="body1">
+        <Typography variant="body1" paragraph>
           Finding nutritious meals across campus dining halls can be challenging. 
           Our app helps Northwestern students make informed choices by providing 
           detailed nutritional information on meals served at campus dining halls.
         </Typography>
         
-        <Typography variant="body1" >
+        <Typography variant="body1" paragraph>
           With the Dining Hall Tracker, you can:
         </Typography>
         
@@ -57,7 +57,7 @@ export const HomePage = () => {
           <Typography variant="h5" gutterBottom>
             Admin Access
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary" paragraph>
             Are you an administrator? Access the admin panel to manage meals and dining halls.
           </Typography>
           <Button

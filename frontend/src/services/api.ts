@@ -6,6 +6,14 @@ const API_BASE_URL = isProduction
   ? '/api/v1' 
   : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1');
 
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  return isAuthenticated ? {
+    'Authorization': 'Bearer admin123'
+  } : {};
+};
+
 export const api = {
   async checkHealth() {
     const response = await fetch(`${API_BASE_URL}/health`, {
@@ -63,6 +71,7 @@ export const api = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...getAuthHeaders()
       },
       body: JSON.stringify({ meal: mealData }),
     });
@@ -79,6 +88,7 @@ export const api = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        ...getAuthHeaders()
       },
       body: JSON.stringify({ meal: mealData }),
     });
@@ -93,6 +103,7 @@ export const api = {
   async deleteMeal(id: number) {
     const response = await fetch(`${API_BASE_URL}/meals/${id}`, {
       method: 'DELETE',
+      headers: getAuthHeaders()
     });
     
     if (!response.ok) {
