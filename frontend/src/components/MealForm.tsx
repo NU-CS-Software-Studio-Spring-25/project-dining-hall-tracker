@@ -1,10 +1,17 @@
-import { useState, useEffect } from 'react';
-import { 
-  Dialog, DialogTitle, DialogContent, DialogActions, 
-  Button, TextField, MenuItem, Box, CircularProgress
-} from '@mui/material';
-import { api } from '../services/api';
-import type { Meal, DiningHall } from '../types';
+import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  MenuItem,
+  Box,
+  CircularProgress,
+} from "@mui/material";
+import { api } from "../services/api";
+import type { Meal, DiningHall } from "../types";
 
 interface MealFormProps {
   open: boolean;
@@ -14,21 +21,27 @@ interface MealFormProps {
   title: string;
 }
 
-export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) => {
+export const MealForm = ({
+  open,
+  onClose,
+  onSave,
+  meal,
+  title,
+}: MealFormProps) => {
   const isEditMode = !!meal;
   const [diningHalls, setDiningHalls] = useState<DiningHall[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
-  const [formData, setFormData] = useState<Omit<Meal, 'id' | 'dining_hall'>>({
-    name: '',
+
+  const [formData, setFormData] = useState<Omit<Meal, "id" | "dining_hall">>({
+    name: "",
     protein: 0,
     carbs: 0,
     fat: 0,
     fiber: 0,
     calories: 0,
-    serving_size: '',
-    dining_hall_id: 0
+    serving_size: "",
+    dining_hall_id: 0,
   });
 
   useEffect(() => {
@@ -42,19 +55,19 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
         fiber: meal.fiber,
         calories: meal.calories,
         serving_size: meal.serving_size,
-        dining_hall_id: meal.dining_hall_id
+        dining_hall_id: meal.dining_hall_id,
       });
     } else {
       // Reset form for create mode
       setFormData({
-        name: '',
+        name: "",
         protein: 0,
         carbs: 0,
         fat: 0,
         fiber: 0,
         calories: 0,
-        serving_size: '',
-        dining_hall_id: 0
+        serving_size: "",
+        dining_hall_id: 0,
       });
     }
   }, [meal]);
@@ -65,8 +78,8 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
         const data = await api.getDiningHalls();
         setDiningHalls(data);
       } catch (err) {
-        console.error('Failed to fetch dining halls:', err);
-        setError('Failed to load dining halls. Please try again.');
+        console.error("Failed to fetch dining halls:", err);
+        setError("Failed to load dining halls. Please try again.");
       }
     };
 
@@ -75,32 +88,36 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-    
+
     // Convert number inputs from string to number
-    const processedValue = type === 'number' ? Number(value) : value;
-    
+    const processedValue = type === "number" ? Number(value) : value;
+
     setFormData({
       ...formData,
-      [name]: processedValue
+      [name]: processedValue,
     });
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       if (isEditMode && meal) {
         await api.updateMeal(meal.id, formData);
       } else {
         await api.createMeal(formData);
       }
-      
+
       onSave();
       onClose();
     } catch (err) {
-      console.error('Error saving meal:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred while saving the meal');
+      console.error("Error saving meal:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "An error occurred while saving the meal"
+      );
     } finally {
       setLoading(false);
     }
@@ -110,13 +127,12 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        {error && (
-          <Box sx={{ color: 'error.main', mb: 2 }}>
-            {error}
-          </Box>
-        )}
-        
-        <Box component="form" sx={{ mt: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {error && <Box sx={{ color: "error.main", mb: 2 }}>{error}</Box>}
+
+        <Box
+          component="form"
+          sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 2 }}
+        >
           <TextField
             required
             fullWidth
@@ -125,7 +141,7 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             value={formData.name}
             onChange={handleChange}
           />
-          
+
           <TextField
             select
             required
@@ -135,14 +151,16 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             value={formData.dining_hall_id}
             onChange={handleChange}
           >
-            <MenuItem value={0} disabled>Select a dining hall</MenuItem>
+            <MenuItem value={0} disabled>
+              Select a dining hall
+            </MenuItem>
             {diningHalls.map((hall) => (
               <MenuItem key={hall.id} value={hall.id}>
                 {hall.name}
               </MenuItem>
             ))}
           </TextField>
-          
+
           <TextField
             required
             fullWidth
@@ -153,7 +171,7 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             onChange={handleChange}
             inputProps={{ min: 0, step: 0.1 }}
           />
-          
+
           <TextField
             required
             fullWidth
@@ -164,7 +182,7 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             onChange={handleChange}
             inputProps={{ min: 0, step: 0.1 }}
           />
-          
+
           <TextField
             required
             fullWidth
@@ -175,7 +193,7 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             onChange={handleChange}
             inputProps={{ min: 0, step: 0.1 }}
           />
-          
+
           <TextField
             required
             fullWidth
@@ -186,7 +204,7 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             onChange={handleChange}
             inputProps={{ min: 0, step: 0.1 }}
           />
-          
+
           <TextField
             required
             fullWidth
@@ -197,15 +215,15 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
             onChange={handleChange}
             inputProps={{ min: 0, step: 1 }}
           />
-          
+
           <TextField
             required
             fullWidth
+            type="number"
             label="Serving Size"
             name="serving_size"
             value={formData.serving_size}
             onChange={handleChange}
-            placeholder="e.g., 1 cup, 100g"
           />
         </Box>
       </DialogContent>
@@ -213,14 +231,20 @@ export const MealForm = ({ open, onClose, onSave, meal, title }: MealFormProps) 
         <Button onClick={onClose} disabled={loading}>
           Cancel
         </Button>
-        <Button 
-          onClick={handleSubmit} 
-          variant="contained" 
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
           disabled={loading || !formData.name || formData.dining_hall_id === 0}
         >
-          {loading ? <CircularProgress size={24} /> : isEditMode ? 'Update' : 'Create'}
+          {loading ? (
+            <CircularProgress size={24} />
+          ) : isEditMode ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
         </Button>
       </DialogActions>
     </Dialog>
   );
-}; 
+};
