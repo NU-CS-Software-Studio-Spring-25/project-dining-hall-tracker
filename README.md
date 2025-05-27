@@ -1,131 +1,59 @@
+# Dining Hall Tracker Team!
+Website: https://project-dining-hall-tracker.onrender.com/
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Heroku: https://dining-finder-app-2ddcb907b75f.herokuapp.com/
 
-Things you may want to cover:
 
-* Ruby version
+## Team Members: 
+- Jason Latz
+- Taeyoung Lee
+- Prashant Ghimire
+- Bella Fishman
 
-* System dependencies
+## Project Overview
+- Querying Compass Dining API
+- Get nutritional information for each meal
+- Display campus-wide options for meals that are
+  - High Protein
+  - High Carb
+  - Vegetarian/Vegan
 
-* Configuration
+## Asana Project Tracker:
+https://app.asana.com/1/943239799185976/project/1210211820216053/board/1210211802194778
 
-* Database creation
+## FIGMA Model:
+https://www.figma.com/design/eW05PxX9o6PbFHLKNyeEwY/Dining-Hall-Tracker?node-id=243-1&t=ezN2T3Xc8ieCh9y6-1
 
-* Database initialization
+## How to run locally:
+FRONT END
+Npm install
+Npm run 
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-# Backend Setup with Devise
-
-This README explains the process of setting up the backend for the Dining Hall Tracker project, including the steps taken to fix issues and what worked in the end.
-
-## Overview
-
-The backend is a Rails application using Devise for authentication. The setup process involved:
-
-1. Installing Ruby 3.2.2 using rbenv.
-2. Installing and configuring Devise for user authentication.
-3. Fixing issues with migrations and database setup.
-
-## Steps Taken
-
-### 1. Install Ruby 3.2.2 with rbenv
-
-```sh
-# Install rbenv and ruby-build
-brew install rbenv ruby-build
-
-# Install Ruby 3.2.2
-rbenv install 3.2.2
-
-# Set local Ruby version in the backend directory
-cd backend
-rbenv local 3.2.2
-
-# Install bundler
-gem install bundler
-```
-
-### 2. Install and Configure Devise
-
-```sh
-# Add Devise to Gemfile
-# gem 'devise'
-# gem 'devise-jwt'
-
-# Install gems
+BACKEND
 bundle install
-
-# Generate Devise User model and migration
-bundle exec rails generate devise User
-```
-
-### 3. Fix Migration Issues
-
-- **Issue**: The Devise migration was trying to alter a `users` table that did not exist.
-- **Solution**: Delete the existing `User` model and any Devise migration files, then regenerate them.
-
-```sh
-# Delete the User model and Devise migration
-rm app/models/user.rb
-rm db/migrate/*_add_devise_to_users.rb
-
-# Regenerate Devise User model and migration
-bundle exec rails generate devise User
-```
-
-### 4. Fix Route Conflicts
-
-- **Issue**: Duplicate `devise_for :users` routes in `config/routes.rb`.
-- **Solution**: Remove the duplicate route and keep only the one with custom controllers.
-
-```ruby
-# config/routes.rb
-devise_for :users, controllers: {
-  sessions: 'users/sessions',
-  registrations: 'users/registrations'
-}
-```
-
-### 5. Reset and Migrate the Database
-
-```sh
-# Reset the database
-bundle exec rails db:reset
-
-# Run migrations
+bundle exec rails db:create 
 bundle exec rails db:migrate
-
-# Seed the database
-bundle exec rails db:seed
-```
-
-### 6. Start the Rails Server
-
-```sh
+bundle exec rails db:seed   
 bundle exec rails server
-```
 
-## What Worked in the End
+## In Class Interface Feedback
+- Color code table by dining hall
+- or mark high-protein or something in bold
+- dropdown to pick dining hall on table page
+- search functionality for the table?
+  
 
-- Using rbenv to manage Ruby versions.
-- Generating a fresh Devise User model and migration.
-- Fixing route conflicts in `config/routes.rb`.
-- Resetting the database and running migrations in the correct order.
+## MVP Info: 
+Webapp that allows the user to select a dining option (ie high protein) and see 3 high-protein dining hall options around campus for the current dining time.
 
-## Troubleshooting
+User: Health-Conscious Northwestern Students
+Administrator: 1 NU student or NU employee
+Competing Application: DineOnCampus
 
-- If you encounter issues with migrations, ensure the `users` table is created before any migrations that reference it.
-- If you see duplicate route errors, check `config/routes.rb` for duplicate `devise_for :users` lines.
+Application can:
+- filter based on dietary preferences/macronutrient content
 
-## Conclusion
+Current solutions: Use DineOnCampus and search through macronutrients yourself. (Slow, inefficient)
 
-Following these steps should allow you to set up the backend with Devise authentication successfully. If you encounter any issues, refer to the troubleshooting section or consult the Rails and Devise documentation.
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/DBaAVOQl)
