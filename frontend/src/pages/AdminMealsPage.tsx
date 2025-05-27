@@ -9,12 +9,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { api } from '../services/api';
 import { MealForm } from '../components/MealForm';
+import { useNotification } from '../contexts/NotificationContext';
 import type { Meal, NutrientFilterParams } from '../types/index';
 
 export const AdminMealsPage = () => {
   const [meals, setMeals] = useState<Meal[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { showSuccess, showError } = useNotification();
   
   // State for filtering
   const [filter, setFilter] = useState<NutrientFilterParams>({
@@ -54,6 +56,7 @@ export const AdminMealsPage = () => {
         setError(null);
       } catch (err) {
         setError('Failed to load meals. Please try again later.');
+        showError('Failed to load meals. Please try again later.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -61,7 +64,7 @@ export const AdminMealsPage = () => {
     };
     
     fetchMeals();
-  }, []);
+  }, [showError]);
   
   // Apply filter
   const handleFilterApply = async () => {
@@ -75,6 +78,7 @@ export const AdminMealsPage = () => {
       setError(null);
     } catch (err) {
       setError('Failed to apply filter. Please try again.');
+      showError('Failed to apply filter. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -95,6 +99,7 @@ export const AdminMealsPage = () => {
       setError(null);
     } catch (err) {
       setError('Failed to reset filter. Please try again.');
+      showError('Failed to reset filter. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -149,8 +154,10 @@ export const AdminMealsPage = () => {
       await api.deleteMeal(mealToDelete.id);
       setMeals(meals.filter((m) => m.id !== mealToDelete.id));
       setError(null);
+      showSuccess(`Successfully deleted "${mealToDelete.name}"!`);
     } catch (err) {
       setError('Failed to delete meal. Please try again.');
+      showError(`Failed to delete "${mealToDelete.name}". Please try again.`);
       console.error(err);
     } finally {
       setLoading(false);
@@ -168,6 +175,7 @@ export const AdminMealsPage = () => {
       setError(null);
     } catch (err) {
       setError('Failed to refresh meals. Please try again.');
+      showError('Failed to refresh meals. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);

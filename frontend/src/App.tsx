@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme, CssBaseline, Alert, Snackbar } from '@mui/m
 import { api } from './services/api'
 import { AuthProvider } from './contexts/AuthContext'
 import { FavoritesProvider } from './contexts/FavoritesContext'
+import { NotificationProvider } from './contexts/NotificationContext'
 import { NavBar } from './components/NavBar'
 import { Footer } from './components/Footer'
 import { HomePage } from './pages/HomePage'
@@ -118,41 +119,43 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AuthProvider>
-        <FavoritesProvider>
-          <Router>
-            <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-              <NavBar />
-              <main style={{ flex: 1 }}>
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/meals" element={<MealsPage />} />
-                  <Route path="/dining-halls" element={<DiningHallsPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/signup" element={<SignupPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/admin" element={<AdminPage />} />
-                  <Route 
-                    path="/admin/meals" 
-                    element={
-                      <ProtectedRoute>
-                        <AdminMealsPage />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
-              <Snackbar open={showApiError} autoHideDuration={6000} onClose={() => setShowApiError(false)}>
-                <Alert severity="error" sx={{ width: '100%' }} onClose={() => setShowApiError(false)}>
-                  {apiStatus}
-                </Alert>
-              </Snackbar>
-            </div>
-          </Router>
-        </FavoritesProvider>
-      </AuthProvider>
+      <NotificationProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <Router>
+              <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                <NavBar />
+                <main style={{ flex: 1 }}>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/meals" element={<MealsPage />} />
+                    <Route path="/dining-halls" element={<DiningHallsPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/admin" element={<AdminPage />} />
+                    <Route 
+                      path="/admin/meals" 
+                      element={
+                        <ProtectedRoute>
+                          <AdminMealsPage />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </main>
+                <Footer />
+                <Snackbar open={showApiError} autoHideDuration={6000} onClose={() => setShowApiError(false)}>
+                  <Alert severity="error" sx={{ width: '100%' }} onClose={() => setShowApiError(false)}>
+                    {apiStatus}
+                  </Alert>
+                </Snackbar>
+              </div>
+            </Router>
+          </FavoritesProvider>
+        </AuthProvider>
+      </NotificationProvider>
     </ThemeProvider>
   )
 }

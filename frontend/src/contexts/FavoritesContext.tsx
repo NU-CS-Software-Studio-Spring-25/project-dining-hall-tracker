@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { useNotification } from './NotificationContext';
 
 interface Favorite {
   id: number;
@@ -35,6 +37,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
+  const { showSuccess, showError } = useNotification();
 
   useEffect(() => {
     if (user) {
@@ -84,17 +87,23 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
       if (response.ok) {
         const data = await response.json();
         setFavorites((prev) => [...prev, data.favorite]);
+        showSuccess(`Added "${mealName}" to favorites!`);
       } else {
         throw new Error('Failed to add favorite');
       }
     } catch (error) {
       console.error('Add favorite error:', error);
+      showError(`Failed to add "${mealName}" to favorites. Please try again.`);
       throw error;
     }
   };
 
   const removeFavorite = async (favoriteId: number) => {
     if (!user) return;
+
+    // Find the meal name for the notification
+    const favorite = favorites.find(fav => fav.id === favoriteId);
+    const mealName = favorite?.meal_name || 'meal';
 
     try {
       const response = await fetch(`http://localhost:3000/api/v1/favorites/${favoriteId}`, {
@@ -104,11 +113,13 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
 
       if (response.ok) {
         setFavorites((prev) => prev.filter((fav) => fav.id !== favoriteId));
+        showSuccess(`Removed "${mealName}" from favorites!`);
       } else {
         throw new Error('Failed to remove favorite');
       }
     } catch (error) {
       console.error('Remove favorite error:', error);
+      showError(`Failed to remove "${mealName}" from favorites. Please try again.`);
       throw error;
     }
   };

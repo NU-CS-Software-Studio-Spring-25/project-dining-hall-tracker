@@ -11,6 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { api } from "../services/api";
+import { useNotification } from "../contexts/NotificationContext";
 import type { Meal, DiningHall } from "../types";
 
 interface MealFormProps {
@@ -32,6 +33,7 @@ export const MealForm = ({
   const [diningHalls, setDiningHalls] = useState<DiningHall[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { showSuccess, showError } = useNotification();
 
   const [formData, setFormData] = useState<Omit<Meal, "id" | "dining_hall">>({
     name: "",
@@ -80,11 +82,12 @@ export const MealForm = ({
       } catch (err) {
         console.error("Failed to fetch dining halls:", err);
         setError("Failed to load dining halls. Please try again.");
+        showError("Failed to load dining halls. Please try again.");
       }
     };
 
     fetchDiningHalls();
-  }, []);
+  }, [showError]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -105,19 +108,21 @@ export const MealForm = ({
     try {
       if (isEditMode && meal) {
         await api.updateMeal(meal.id, formData);
+        showSuccess(`Successfully updated "${formData.name}"!`);
       } else {
         await api.createMeal(formData);
+        showSuccess(`Successfully created "${formData.name}"!`);
       }
 
       onSave();
       onClose();
     } catch (err) {
       console.error("Error saving meal:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "An error occurred while saving the meal"
-      );
+      const errorMessage = err instanceof Error
+        ? err.message
+        : "An error occurred while saving the meal";
+      setError(errorMessage);
+      showError(errorMessage);
     } finally {
       setLoading(false);
     }
