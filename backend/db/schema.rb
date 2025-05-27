@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_25_122549) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_26_050738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_25_122549) do
     t.bigint "dining_hall_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
+    t.text "ingredients"
     t.index ["dining_hall_id"], name: "index_meals_on_dining_hall_id"
   end
 
@@ -64,6 +66,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_25_122549) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "favorites", "users"
   add_foreign_key "meals", "dining_halls"
 end
