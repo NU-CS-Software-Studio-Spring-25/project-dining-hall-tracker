@@ -137,9 +137,9 @@ export const DiningHallsPage = () => {
         ) : (
           <>
             {selectedDiningHall.meals && selectedDiningHall.meals.length > 0 ? (
-              <Grid container spacing={3}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                 {selectedDiningHall.meals.map((meal) => (
-                  <Grid item xs={12} md={6} lg={4} key={meal.id}>
+                  <Box key={meal.id} sx={{ width: { xs: '100%', md: 'calc(50% - 12px)', lg: 'calc(33.33% - 16px)' } }}>
                     <Card>
                       <CardContent>
                         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -171,9 +171,9 @@ export const DiningHallsPage = () => {
                         </Box>
                       </CardContent>
                     </Card>
-                  </Grid>
+                  </Box>
                 ))}
-              </Grid>
+              </Box>
             ) : (
               <Typography>No meals available for this dining hall.</Typography>
             )}

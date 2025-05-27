@@ -55,10 +55,13 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
 
       if (response.ok) {
         const data = await response.json();
-        setFavorites(data);
+        setFavorites(Array.isArray(data) ? data : []);
+      } else {
+        setFavorites([]);
       }
     } catch (error) {
       console.error('Failed to fetch favorites:', error);
+      setFavorites([]);
     } finally {
       setIsLoading(false);
     }
