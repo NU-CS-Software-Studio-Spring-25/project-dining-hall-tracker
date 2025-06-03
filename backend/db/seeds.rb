@@ -3,9 +3,9 @@
 #
 # Create dining halls
 dining_halls = [
-  { name: 'Allison', location: 'North Campus' },
-  { name: 'Plex West', location: 'North Campus' },
-  { name: 'Plex East', location: 'North Campus' },
+  { name: 'Allison', location: 'South Campus' },
+  { name: 'Plex West', location: 'South Campus' },
+  { name: 'Plex East', location: 'South Campus' },
   { name: 'Sargent', location: 'North Campus' },
   { name: 'Elder', location: 'North Campus' }
 ]
