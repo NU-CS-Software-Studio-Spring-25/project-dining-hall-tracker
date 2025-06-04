@@ -189,14 +189,16 @@ export const AdminMealsPage = () => {
           Manage Meals
         </Typography>
         
-        <Button 
-          variant="contained" 
-          color="primary" 
-          startIcon={<AddIcon />}
-          onClick={handleCreateMeal}
-        >
-          Add New Meal
-        </Button>
+        <Tooltip title="Create a new meal entry for the dining halls">
+          <Button 
+            variant="contained" 
+            color="primary" 
+            startIcon={<AddIcon />}
+            onClick={handleCreateMeal}
+          >
+            Add New Meal
+          </Button>
+        </Tooltip>
       </Box>
       
       {error && (
@@ -233,21 +235,25 @@ export const AdminMealsPage = () => {
             onChange={(e) => setFilter({ ...filter, amount: Number(e.target.value) })}
           />
           
-          <Button 
-            variant="contained" 
-            onClick={handleFilterApply}
-            disabled={loading}
-          >
-            Apply Filter
-          </Button>
+          <Tooltip title="Search for meals with specific nutritional requirements">
+            <Button 
+              variant="contained" 
+              onClick={handleFilterApply}
+              disabled={loading}
+            >
+              Apply Filter
+            </Button>
+          </Tooltip>
           
-          <Button 
-            variant="outlined" 
-            onClick={handleFilterReset}
-            disabled={loading}
-          >
-            Reset
-          </Button>
+          <Tooltip title="Clear all filters and show all meals">
+            <Button 
+              variant="outlined" 
+              onClick={handleFilterReset}
+              disabled={loading}
+            >
+              Reset
+            </Button>
+          </Tooltip>
         </Box>
       </Paper>
       

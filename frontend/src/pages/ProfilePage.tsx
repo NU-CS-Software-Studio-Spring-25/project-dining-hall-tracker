@@ -9,7 +9,6 @@ import {
   ListItemText,
   Chip,
   IconButton,
-  Grid,
   Card,
   CardContent,
   Divider,
@@ -19,6 +18,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import { Delete, Star } from "@mui/icons-material";
 import { useAuth } from "../contexts/AuthContext";
@@ -104,47 +104,51 @@ export const ProfilePage = () => {
         {isLoading || loadingMeals ? (
           <Typography>Loading favorites...</Typography>
         ) : favoriteMeals.length > 0 ? (
-          <Grid container spacing={2}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              gap: 2,
+            }}
+          >
             {favoriteMeals.map((meal) => (
-              <Grid item xs={12} md={6} key={meal.id}>
-                <Card variant="outlined">
-                  <CardContent>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        mb: 1,
-                      }}
-                    >
-                      <Typography variant="h6" sx={{ flex: 1 }}>
-                        {meal.name}
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      Serving Size: {meal.serving_size}
+              <Card variant="outlined" key={meal.id}>
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 1,
+                    }}
+                  >
+                    <Typography variant="h6" sx={{ flex: 1 }}>
+                      {meal.name}
                     </Typography>
-                    <Divider sx={{ my: 1 }} />
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      <Chip label={`Protein: ${meal.protein}g`} size="small" />
-                      <Chip label={`Carbs: ${meal.carbs}g`} size="small" />
-                      <Chip label={`Fat: ${meal.fat}g`} size="small" />
-                      <Chip label={`Fiber: ${meal.fiber}g`} size="small" />
-                      <Chip
-                        label={`Calories: ${meal.calories}`}
-                        color="primary"
-                        size="small"
-                      />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Serving Size: {meal.serving_size}
+                  </Typography>
+                  <Divider sx={{ my: 1 }} />
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    <Chip label={`Protein: ${meal.protein}g`} size="small" />
+                    <Chip label={`Carbs: ${meal.carbs}g`} size="small" />
+                    <Chip label={`Fat: ${meal.fat}g`} size="small" />
+                    <Chip label={`Fiber: ${meal.fiber}g`} size="small" />
+                    <Chip
+                      label={`Calories: ${meal.calories}`}
+                      color="primary"
+                      size="small"
+                    />
+                  </Box>
+                </CardContent>
+              </Card>
             ))}
-          </Grid>
+          </Box>
         ) : favorites.length > 0 ? (
           <Box sx={{ textAlign: "center", py: 4 }}>
             <Typography variant="body1" color="text.secondary">
@@ -157,13 +161,15 @@ export const ProfilePage = () => {
                     primary={favorite.meal_name}
                     secondary={`Added on ${new Date(favorite.created_at).toLocaleDateString()}`}
                   />
-                  <IconButton
-                    onClick={() => handleRemoveFavorite(favorite.id)}
-                    size="small"
-                    color="error"
-                  >
-                    <Delete />
-                  </IconButton>
+                  <Tooltip title="Remove from favorites">
+                    <IconButton
+                      onClick={() => handleRemoveFavorite(favorite.id)}
+                      size="small"
+                      color="error"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
                 </ListItem>
               ))}
             </List>

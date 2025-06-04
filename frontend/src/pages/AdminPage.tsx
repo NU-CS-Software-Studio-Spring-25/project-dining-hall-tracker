@@ -1,11 +1,21 @@
 import { useState } from 'react';
-import { 
-  Container, Typography, Paper, Box, TextField, Button, 
-  Alert, CircularProgress, Grid, Card, CardContent, CardActions
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export const AdminPage = () => {
   const [password, setPassword] = useState('');
@@ -30,7 +40,8 @@ export const AdminPage = () => {
     try {
       // In a real application, this would be an API call to verify credentials
       // For now, we'll use a simple password check
-      if (password === 'admin123') { // Replace with a secure password in production
+      if (password === 'admin123') {
+        // Replace with a secure password in production
         setIsAuthenticated(true);
         localStorage.setItem('isAuthenticated', 'true');
       } else {
@@ -51,18 +62,18 @@ export const AdminPage = () => {
 
   if (!isAuthenticated) {
     return (
-      <Container maxWidth="sm" sx={{ py: 4 }}>
+      <Container maxWidth='sm' sx={{ py: 4 }}>
         <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
+          <Typography variant='h4' component='h1' gutterBottom>
             Admin Login
           </Typography>
-          
+
           <form onSubmit={handleLogin}>
             <Box sx={{ mb: 3 }}>
               <TextField
                 fullWidth
-                label="Password"
-                type="password"
+                label='Password'
+                type='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 error={!!error}
@@ -70,10 +81,10 @@ export const AdminPage = () => {
                 disabled={loading}
               />
             </Box>
-            
+
             <Button
-              type="submit"
-              variant="contained"
+              type='submit'
+              variant='contained'
               fullWidth
               disabled={loading}
             >
@@ -86,16 +97,19 @@ export const AdminPage = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4" component="h1">
+    <Container maxWidth='lg' sx={{ py: 4 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 4,
+        }}
+      >
+        <Typography variant='h4' component='h1'>
           Admin Dashboard
         </Typography>
-        <Button 
-          variant="outlined" 
-          color="error"
-          onClick={handleLogout}
-        >
+        <Button variant='outlined' color='error' onClick={handleLogout}>
           Logout
         </Button>
       </Box>
@@ -107,18 +121,18 @@ export const AdminPage = () => {
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <RestaurantMenuIcon sx={{ fontSize: 40, mr: 2 }} />
-                  <Typography variant="h5" component="h2">
+                  <Typography variant='h5' component='h2'>
                     Manage Meals
                   </Typography>
                 </Box>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant='body1' color='text.secondary'>
                   Add, edit, or remove meals from the dining halls.
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button 
-                  size="small" 
-                  color="primary"
+                <Button
+                  size='small'
+                  color='primary'
                   onClick={() => navigate('/admin/meals')}
                 >
                   Manage Meals
@@ -132,18 +146,18 @@ export const AdminPage = () => {
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <StorefrontIcon sx={{ fontSize: 40, mr: 2 }} />
-                  <Typography variant="h5" component="h2">
+                  <Typography variant='h5' component='h2'>
                     Manage Dining Halls
                   </Typography>
                 </Box>
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant='body1' color='text.secondary'>
                   Add, edit, or remove dining halls from the system.
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button 
-                  size="small" 
-                  color="primary"
+                <Button
+                  size='small'
+                  color='primary'
                   onClick={() => navigate('/admin/dining-halls')}
                 >
                   Manage Dining Halls
@@ -155,4 +169,4 @@ export const AdminPage = () => {
       </Box>
     </Container>
   );
-}; 
+};

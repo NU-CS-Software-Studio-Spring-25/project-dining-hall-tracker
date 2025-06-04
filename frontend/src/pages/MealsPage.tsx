@@ -21,6 +21,7 @@ import {
   Card,
   CardContent,
   Divider,
+  Tooltip,
 } from "@mui/material";
 import { Star, StarBorder } from "@mui/icons-material";
 import { api } from "../services/api";
@@ -35,6 +36,7 @@ export const MealsPage = () => {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const { user } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   // State for filtering
   const [filter, setFilter] = useState<NutrientFilterParams>({
@@ -55,18 +57,18 @@ export const MealsPage = () => {
     { value: "calories", label: "Calories" },
   ];
 
-  //const handleFavoriteClick = async (mealName: string) => {
-  //  if (!user) {
-  //    window.location.href = "/login";
-  //    return;
-  //  }
+  const handleFavoriteClick = async (mealName: string) => {
+    if (!user) {
+      window.location.href = "/login";
+      return;
+    }
 
-  //try {
-  //  await toggleFavorite(mealName);
-  //} catch (error) {
-  //  console.error("Failed to toggle favorite:", error);
-  //}
-  //};
+    try {
+      await toggleFavorite(mealName);
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+    }
+  };
 
   // Load meals
   useEffect(() => {
@@ -133,12 +135,12 @@ export const MealsPage = () => {
   };
 
   // Filter meals by favorites if needed
-  //const filteredMeals = showFavoritesOnly
-  //  ? meals.filter((meal) => isFavorite(meal.name))
-  //  : meals;
+  const filteredMeals = showFavoritesOnly
+    ? meals.filter((meal) => isFavorite(meal.name))
+    : meals;
 
   // Sort function for client-side sorting
-  const sortedMeals = [...meals].sort((a, b) => {
+  const sortedMeals = [...filteredMeals].sort((a, b) => {
     const aValue = a[orderBy] as any;
     const bValue = b[orderBy] as any;
 
@@ -149,7 +151,7 @@ export const MealsPage = () => {
     }
   });
 
-  //const favoriteMeals = meals.filter((meal) => isFavorite(meal.name));
+  const favoriteMeals = meals.filter((meal) => isFavorite(meal.name));
 
   // Pagination of Food items
   const [currentPage, setCurrentPage] = useState(1);
@@ -207,21 +209,37 @@ export const MealsPage = () => {
             }
           />
 
-          <Button
-            variant="contained"
-            onClick={handleFilterApply}
-            disabled={loading}
-          >
-            Apply Filter
-          </Button>
+          <Tooltip title="Apply the selected nutritional filter to search for meals">
+            <Button
+              variant="contained"
+              onClick={handleFilterApply}
+              disabled={loading}
+            >
+              Apply Filter
+            </Button>
+          </Tooltip>
 
-          <Button
-            variant="outlined"
-            onClick={handleFilterReset}
-            disabled={loading}
-          >
-            Reset
-          </Button>
+          <Tooltip title="Clear all filters and show all meals">
+            <Button
+              variant="outlined"
+              onClick={handleFilterReset}
+              disabled={loading}
+            >
+              Reset
+            </Button>
+          </Tooltip>
+
+          {user && (
+            <Tooltip title="Show only your favorite meals">
+              <Button
+                variant={showFavoritesOnly ? "contained" : "outlined"}
+                onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                startIcon={<Star />}
+              >
+                {showFavoritesOnly ? "Show All" : "Favorites Only"}
+              </Button>
+            </Tooltip>
+          )}
         </Box>
       </Paper>
 
@@ -234,68 +252,83 @@ export const MealsPage = () => {
           <Table>
             <TableHead>
               <TableRow>
+                {user && <TableCell>Favorite</TableCell>}
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "name"}
-                    direction={orderBy === "name" ? order : "asc"}
-                    onClick={() => handleRequestSort("name")}
-                  >
-                    Meal Name
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by meal name">
+                    <TableSortLabel
+                      active={orderBy === "name"}
+                      direction={orderBy === "name" ? order : "asc"}
+                      onClick={() => handleRequestSort("name")}
+                    >
+                      Meal Name
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "dining_hall_id"}
-                    direction={orderBy === "dining_hall_id" ? order : "asc"}
-                    onClick={() => handleRequestSort("dining_hall_id")}
-                  >
-                    Dining Hall
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by dining hall">
+                    <TableSortLabel
+                      active={orderBy === "dining_hall_id"}
+                      direction={orderBy === "dining_hall_id" ? order : "asc"}
+                      onClick={() => handleRequestSort("dining_hall_id")}
+                    >
+                      Dining Hall
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "protein"}
-                    direction={orderBy === "protein" ? order : "asc"}
-                    onClick={() => handleRequestSort("protein")}
-                  >
-                    Protein (g)
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by protein content">
+                    <TableSortLabel
+                      active={orderBy === "protein"}
+                      direction={orderBy === "protein" ? order : "asc"}
+                      onClick={() => handleRequestSort("protein")}
+                    >
+                      Protein (g)
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "carbs"}
-                    direction={orderBy === "carbs" ? order : "asc"}
-                    onClick={() => handleRequestSort("carbs")}
-                  >
-                    Carbs (g)
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by carbohydrate content">
+                    <TableSortLabel
+                      active={orderBy === "carbs"}
+                      direction={orderBy === "carbs" ? order : "asc"}
+                      onClick={() => handleRequestSort("carbs")}
+                    >
+                      Carbs (g)
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "fat"}
-                    direction={orderBy === "fat" ? order : "asc"}
-                    onClick={() => handleRequestSort("fat")}
-                  >
-                    Fat (g)
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by fat content">
+                    <TableSortLabel
+                      active={orderBy === "fat"}
+                      direction={orderBy === "fat" ? order : "asc"}
+                      onClick={() => handleRequestSort("fat")}
+                    >
+                      Fat (g)
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "fiber"}
-                    direction={orderBy === "fiber" ? order : "asc"}
-                    onClick={() => handleRequestSort("fiber")}
-                  >
-                    Fiber (g)
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by fiber content">
+                    <TableSortLabel
+                      active={orderBy === "fiber"}
+                      direction={orderBy === "fiber" ? order : "asc"}
+                      onClick={() => handleRequestSort("fiber")}
+                    >
+                      Fiber (g)
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <TableSortLabel
-                    active={orderBy === "calories"}
-                    direction={orderBy === "calories" ? order : "asc"}
-                    onClick={() => handleRequestSort("calories")}
-                  >
-                    Calories
-                  </TableSortLabel>
+                  <Tooltip title="Click to sort by calorie count">
+                    <TableSortLabel
+                      active={orderBy === "calories"}
+                      direction={orderBy === "calories" ? order : "asc"}
+                      onClick={() => handleRequestSort("calories")}
+                    >
+                      Calories
+                    </TableSortLabel>
+                  </Tooltip>
                 </TableCell>
                 <TableCell>Serving Size</TableCell>
               </TableRow>
@@ -309,6 +342,19 @@ export const MealsPage = () => {
                       backgroundColor: index % 2 === 0 ? "#fff" : "#f4f4f4",
                     }}
                   >
+                    {user && (
+                      <TableCell>
+                        <Tooltip title={isFavorite(meal.name) ? "Remove from favorites" : "Add to favorites"}>
+                          <IconButton
+                            onClick={() => handleFavoriteClick(meal.name)}
+                            color="primary"
+                            size="small"
+                          >
+                            {isFavorite(meal.name) ? <Star /> : <StarBorder />}
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    )}
                     <TableCell>{meal.name}</TableCell>
                     <TableCell>{meal.dining_hall?.name}</TableCell>
                     <TableCell>{meal.protein}</TableCell>

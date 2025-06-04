@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import {
   Container,
   Typography,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -13,6 +12,7 @@ import {
   Chip,
   CardMedia,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 
 import { Star, StarBorder } from "@mui/icons-material";
@@ -51,8 +51,8 @@ export const DiningHallsPage = () => {
     useState<DiningHall | null>(null);
 
   const { user } = useAuth();
-  //const { isFavorite, toggleFavorite } = useFavorites();
-  /*
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   const handleFavoriteClick = async (mealName: string) => {
     if (!user) {
       // Redirect to login if not authenticated
@@ -66,7 +66,7 @@ export const DiningHallsPage = () => {
       console.error("Failed to toggle favorite:", error);
     }
   };
-*/
+
   useEffect(() => {
     const fetchDiningHalls = async () => {
       setLoading(true);
@@ -150,56 +150,71 @@ export const DiningHallsPage = () => {
         ) : (
           <>
             {selectedDiningHall.meals && selectedDiningHall.meals.length > 0 ? (
-              <Grid container spacing={3}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                  gap: 3,
+                }}
+              >
                 {selectedDiningHall.meals.map((meal) => (
-                  <Grid item xs={12} md={6} lg={4} key={meal.id}>
-                    <Card>
-                      <CardContent>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <Typography
-                            variant="h6"
-                            gutterBottom
-                            sx={{ flex: 1 }}
-                          >
-                            {meal.name}
-                          </Typography>
-                        </Box>
+                  <Card key={meal.id}>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <Typography
-                          variant="body2"
-                          color="text.secondary"
+                          variant="h6"
                           gutterBottom
+                          sx={{ flex: 1 }}
                         >
-                          Serving Size: {meal.serving_size}
+                          {meal.name}
                         </Typography>
-                        <Divider sx={{ my: 1 }} />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            gap: 1,
-                            mt: 2,
-                          }}
-                        >
-                          <Chip label={`Protein: ${meal.protein}g`} />
-                          <Chip label={`Carbs: ${meal.carbs}g`} />
-                          <Chip label={`Fat: ${meal.fat}g`} />
-                          <Chip label={`Fiber: ${meal.fiber}g`} />
-                          <Chip
-                            label={`Calories: ${meal.calories}`}
-                            color="primary"
-                          />
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
+                        {user && (
+                          <Tooltip title={isFavorite(meal.name) ? "Remove from favorites" : "Add to favorites"}>
+                            <IconButton
+                              onClick={() => handleFavoriteClick(meal.name)}
+                              color="primary"
+                              size="small"
+                            >
+                              {isFavorite(meal.name) ? <Star /> : <StarBorder />}
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Serving Size: {meal.serving_size}
+                      </Typography>
+                      <Divider sx={{ my: 1 }} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: 1,
+                          mt: 2,
+                        }}
+                      >
+                        <Chip label={`Protein: ${meal.protein}g`} />
+                        <Chip label={`Carbs: ${meal.carbs}g`} />
+                        <Chip label={`Fat: ${meal.fat}g`} />
+                        <Chip label={`Fiber: ${meal.fiber}g`} />
+                        <Chip
+                          label={`Calories: ${meal.calories}`}
+                          color="primary"
+                        />
+                      </Box>
+                    </CardContent>
+                  </Card>
                 ))}
-              </Grid>
+              </Box>
             ) : (
               <Typography>No meals available for this dining hall.</Typography>
             )}
@@ -215,39 +230,44 @@ export const DiningHallsPage = () => {
         Campus Dining Halls
       </Typography>
 
-      <Grid container spacing={3}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: 3,
+        }}
+      >
         {diningHalls.map((diningHall) => (
-          <Grid item xs={12} sm={6} md={4} key={diningHall.id}>
-            <Card
-              sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-            >
-              <CardMedia
-                component="img"
-                height="200"
-                image={getDiningHallImage(diningHall.name)}
-                alt={`${diningHall.name} dining hall`}
-                sx={{ objectFit: "cover" }}
-              />
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h5" component="h2" gutterBottom>
-                  {diningHall.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Location: {diningHall.location}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="small"
-                  onClick={() => handleSelectDiningHall(diningHall.id)}
-                >
-                  View Meals
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+          <Card
+            key={diningHall.id}
+            sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+          >
+            <CardMedia
+              component="img"
+              height="200"
+              image={getDiningHallImage(diningHall.name)}
+              alt={`${diningHall.name} dining hall`}
+              sx={{ objectFit: "cover" }}
+            />
+            <CardContent sx={{ flexGrow: 1 }}>
+              <Typography variant="h5" component="h2" gutterBottom>
+                {diningHall.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Location: {diningHall.location}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button
+                size="small"
+                onClick={() => handleSelectDiningHall(diningHall.id)}
+              >
+                View Meals
+              </Button>
+            </CardActions>
+          </Card>
         ))}
-      </Grid>
+      </Box>
     </Container>
   );
 };

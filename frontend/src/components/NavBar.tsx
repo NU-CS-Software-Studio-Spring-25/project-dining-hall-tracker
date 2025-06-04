@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -33,40 +33,56 @@ export const NavBar = () => {
           PurplePlate
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={Link} to="/meals">
-            Meals
-          </Button>
-          <Button color="inherit" component={Link} to="/dining-halls">
-            Dining Halls
-          </Button>
+          <Tooltip title="Return to homepage">
+            <Button color="inherit" component={Link} to="/">
+              Home
+            </Button>
+          </Tooltip>
+          <Tooltip title="Browse and filter all meals">
+            <Button color="inherit" component={Link} to="/meals">
+              Meals
+            </Button>
+          </Tooltip>
+          <Tooltip title="View meals by dining hall location">
+            <Button color="inherit" component={Link} to="/dining-halls">
+              Dining Halls
+            </Button>
+          </Tooltip>
           
           {user ? (
             <>
-              <Button color="inherit" component={Link} to="/profile">
-                Profile
-              </Button>
-              <Button color="inherit" onClick={handleLogout}>
-                Logout
-              </Button>
+              <Tooltip title="View your favorite meals and profile">
+                <Button color="inherit" component={Link} to="/profile">
+                  Profile
+                </Button>
+              </Tooltip>
+              <Tooltip title="Sign out of your account">
+                <Button color="inherit" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </Tooltip>
             </>
           ) : (
             <>
-              <Button color="inherit" component={Link} to="/login">
-                Login
-              </Button>
-              <Button color="inherit" component={Link} to="/signup">
-                Sign Up
-              </Button>
+              <Tooltip title="Sign in to save favorites">
+                <Button color="inherit" component={Link} to="/login">
+                  Login
+                </Button>
+              </Tooltip>
+              <Tooltip title="Create a new account">
+                <Button color="inherit" component={Link} to="/signup">
+                  Sign Up
+                </Button>
+              </Tooltip>
             </>
           )}
           
           {isAuthenticated && (
-            <Button color="inherit" component={Link} to="/admin">
-              Admin
-            </Button>
+            <Tooltip title="Manage meals and dining halls">
+              <Button color="inherit" component={Link} to="/admin">
+                Admin
+              </Button>
+            </Tooltip>
           )}
         </Box>
       </Toolbar>
