@@ -89,6 +89,10 @@ export const MealForm = ({
     fetchDiningHalls();
   }, [showError]);
 
+  const MAX_CARBS_FAT_FIBER = 300;
+  const MAX_CALORIES = 3000;
+  const MAX_SERVING_SIZE_LENGTH = 25;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
 
@@ -102,6 +106,20 @@ export const MealForm = ({
   };
 
   const handleSubmit = async () => {
+    // Input validation
+    if (
+      formData.calories > MAX_CALORIES ||
+      formData.carbs > MAX_CARBS_FAT_FIBER ||
+      formData.fiber > MAX_CARBS_FAT_FIBER ||
+      formData.fat > MAX_CARBS_FAT_FIBER ||
+      formData.protein > MAX_CARBS_FAT_FIBER
+    ) {
+      showError(
+        `Calories, fiber, fat, protein, and carbs must not exceed ${MAX_CALORIES} OR ${MAX_CARBS_FAT_FIBER}`
+      );
+      return; // Stop submission
+    }
+
     setLoading(true);
     setError(null);
 
@@ -118,9 +136,10 @@ export const MealForm = ({
       onClose();
     } catch (err) {
       console.error("Error saving meal:", err);
-      const errorMessage = err instanceof Error
-        ? err.message
-        : "An error occurred while saving the meal";
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "An error occurred while saving the meal";
       setError(errorMessage);
       showError(errorMessage);
     } finally {
@@ -224,11 +243,12 @@ export const MealForm = ({
           <TextField
             required
             fullWidth
-            type="number"
+            type="string"
             label="Serving Size"
             name="serving_size"
             value={formData.serving_size}
             onChange={handleChange}
+            inputProps={{ maxLength: MAX_SERVING_SIZE_LENGTH }}
           />
         </Box>
       </DialogContent>

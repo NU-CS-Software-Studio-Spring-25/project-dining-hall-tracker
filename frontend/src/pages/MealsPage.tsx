@@ -35,7 +35,6 @@ export const MealsPage = () => {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const { user } = useAuth();
-  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   // State for filtering
   const [filter, setFilter] = useState<NutrientFilterParams>({
@@ -56,18 +55,18 @@ export const MealsPage = () => {
     { value: "calories", label: "Calories" },
   ];
 
-  const handleFavoriteClick = async (mealName: string) => {
-    if (!user) {
-      window.location.href = "/login";
-      return;
-    }
+  //const handleFavoriteClick = async (mealName: string) => {
+  //  if (!user) {
+  //    window.location.href = "/login";
+  //    return;
+  //  }
 
-    try {
-      await toggleFavorite(mealName);
-    } catch (error) {
-      console.error("Failed to toggle favorite:", error);
-    }
-  };
+  //try {
+  //  await toggleFavorite(mealName);
+  //} catch (error) {
+  //  console.error("Failed to toggle favorite:", error);
+  //}
+  //};
 
   // Load meals
   useEffect(() => {
@@ -134,12 +133,12 @@ export const MealsPage = () => {
   };
 
   // Filter meals by favorites if needed
-  const filteredMeals = showFavoritesOnly
-    ? meals.filter((meal) => isFavorite(meal.name))
-    : meals;
+  //const filteredMeals = showFavoritesOnly
+  //  ? meals.filter((meal) => isFavorite(meal.name))
+  //  : meals;
 
   // Sort function for client-side sorting
-  const sortedMeals = [...filteredMeals].sort((a, b) => {
+  const sortedMeals = [...meals].sort((a, b) => {
     const aValue = a[orderBy] as any;
     const bValue = b[orderBy] as any;
 
@@ -150,7 +149,7 @@ export const MealsPage = () => {
     }
   });
 
-  const favoriteMeals = meals.filter((meal) => isFavorite(meal.name));
+  //const favoriteMeals = meals.filter((meal) => isFavorite(meal.name));
 
   // Pagination of Food items
   const [currentPage, setCurrentPage] = useState(1);
@@ -223,84 +222,8 @@ export const MealsPage = () => {
           >
             Reset
           </Button>
-
-          {user && (
-            <Button
-              variant={showFavoritesOnly ? "contained" : "outlined"}
-              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-              color="secondary"
-            >
-              {showFavoritesOnly ? "Show Favorites" : "Hide Favorites"}
-            </Button>
-          )}
         </Box>
       </Paper>
-
-      {user && favoriteMeals.length > 0 && !showFavoritesOnly && (
-        <Paper sx={{ p: 3, mb: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Your Favorite Meals Available Today ({favoriteMeals.length})
-          </Typography>
-          <Grid container spacing={2}>
-            {favoriteMeals.map((meal) => (
-              <Grid item xs={12} sm={6} md={4} key={`fav-${meal.id}`}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    bgcolor: "primary.light",
-                    color: "primary.contrastText",
-                  }}
-                >
-                  <CardContent>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        mb: 1,
-                      }}
-                    >
-                      <Typography variant="subtitle1" sx={{ flex: 1 }}>
-                        {meal.name}
-                      </Typography>
-                      <IconButton
-                        onClick={() => handleFavoriteClick(meal.name)}
-                        size="small"
-                        sx={{ color: "inherit" }}
-                      >
-                        <Star />
-                      </IconButton>
-                    </Box>
-                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                      {meal.dining_hall?.name} • {meal.calories} cal
-                    </Typography>
-                    <Divider
-                      sx={{ my: 1, borderColor: "rgba(255,255,255,0.3)" }}
-                    />
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                      <Chip
-                        label={`${meal.protein}g protein`}
-                        size="small"
-                        sx={{ bgcolor: "rgba(255,255,255,0.2)" }}
-                      />
-                      <Chip
-                        label={`${meal.carbs}g carbs`}
-                        size="small"
-                        sx={{ bgcolor: "rgba(255,255,255,0.2)" }}
-                      />
-                      <Chip
-                        label={`${meal.fat}g fat`}
-                        size="small"
-                        sx={{ bgcolor: "rgba(255,255,255,0.2)" }}
-                      />
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Paper>
-      )}
 
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
@@ -311,7 +234,6 @@ export const MealsPage = () => {
           <Table>
             <TableHead>
               <TableRow>
-                {user && <TableCell>Favorite</TableCell>}
                 <TableCell>
                   <TableSortLabel
                     active={orderBy === "name"}
@@ -387,24 +309,9 @@ export const MealsPage = () => {
                       backgroundColor: index % 2 === 0 ? "#fff" : "#f4f4f4",
                     }}
                   >
-                    {user && (
-                      <TableCell>
-                        <IconButton
-                          onClick={() => handleFavoriteClick(meal.name)}
-                          size="small"
-                        >
-                          {isFavorite(meal.name) ? (
-                            <Star color="primary" />
-                          ) : (
-                            <StarBorder color="action" />
-                          )}
-                        </IconButton>
-                      </TableCell>
-                    )}
                     <TableCell>{meal.name}</TableCell>
                     <TableCell>{meal.dining_hall?.name}</TableCell>
                     <TableCell>{meal.protein}</TableCell>
-                    <TableCell>{meal.name}</TableCell>
                     <TableCell>{meal.carbs}</TableCell>
                     <TableCell>{meal.fat}</TableCell>
                     <TableCell>{meal.fiber}</TableCell>
