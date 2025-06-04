@@ -24,7 +24,7 @@ A web application designed to help Northwestern students find dining options bas
 ### Frontend Setup
 ```bash
 npm install
-npm run
+npm run dev
 ```
 
 ### Backend Setup
