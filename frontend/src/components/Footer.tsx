@@ -78,6 +78,7 @@ export const Footer = () => {
                 color: 'primary.main',
               },
             }}
+            aria-label="GitHub repository (opens in new tab)"
           >
             <GitHubIcon fontSize="small" />
             <Typography variant="body2">GitHub</Typography>
