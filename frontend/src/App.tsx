@@ -72,8 +72,10 @@ const theme = createTheme({
           },
         },
         contained: {
+          color: 'white',
           '&:hover': {
             backgroundColor: '#3a1f63', // Darker purple for primary buttons
+            color: 'white', // Keep text white on hover
             transform: 'translateY(-1px)',
             boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)',
           },
@@ -90,7 +92,13 @@ const theme = createTheme({
         text: {
           '&:hover': {
             backgroundColor: 'rgba(78, 42, 132, 0.08)',
-            color: '#3a1f63',
+            // Preserve original text color on hover
+          },
+        },
+        colorInherit: {
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            color: 'inherit', // Keep white text on navbar buttons
           },
         },
       },
@@ -131,6 +139,35 @@ const theme = createTheme({
           '&:hover': {
             color: '#3a1f63 !important',
             textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            backgroundColor: '#ffffff',
+            color: '#1a1a1a',
+            '& fieldset': {
+              borderColor: '#d0d0d0',
+            },
+            '&:hover fieldset': {
+              borderColor: '#4e2a84',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#4e2a84',
+            },
+            '& input': {
+              backgroundColor: 'transparent',
+              color: '#1a1a1a',
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: '#4a4a4a',
+            '&.Mui-focused': {
+              color: '#4e2a84',
+            },
           },
         },
       },
