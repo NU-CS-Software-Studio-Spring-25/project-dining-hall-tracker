@@ -23,13 +23,22 @@ console.log('App module is being loaded')
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#4e2a84', // Northwestern Purple
+      main: '#4e2a84', // Northwestern Purple - improved contrast
+      dark: '#3a1f63', // Darker purple for better contrast
+      light: '#6d4aa0', // Lighter purple maintaining accessibility
     },
     secondary: {
-      main: '#b6acd1', // Light purple
+      main: '#8b79a3', // Improved secondary color for better contrast
+      light: '#b6acd1', // Original light purple for backgrounds
+      dark: '#5d4e73', // Darker secondary for text on light backgrounds
     },
     background: {
-      default: '#f5f5f5',
+      default: '#f8f9fa', // Slightly improved background for better contrast
+      paper: '#ffffff',
+    },
+    text: {
+      primary: '#1a1a1a', // High contrast text
+      secondary: '#4a4a4a', // Improved secondary text contrast
     },
   },
   typography: {
@@ -46,6 +55,83 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          transition: 'all 0.3s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+          },
+          '&:focus': {
+            outline: '3px solid rgba(78, 42, 132, 0.5)',
+            outlineOffset: '2px',
+          },
+        },
+        contained: {
+          '&:hover': {
+            backgroundColor: '#3a1f63', // Darker purple for primary buttons
+            transform: 'translateY(-1px)',
+            boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)',
+          },
+        },
+        outlined: {
+          '&:hover': {
+            backgroundColor: 'rgba(78, 42, 132, 0.1)',
+            borderColor: '#3a1f63',
+            color: '#3a1f63',
+            transform: 'translateY(-1px)',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+          },
+        },
+        text: {
+          '&:hover': {
+            backgroundColor: 'rgba(78, 42, 132, 0.08)',
+            color: '#3a1f63',
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          transition: 'all 0.3s ease-in-out',
+          '&:hover': {
+            backgroundColor: 'rgba(78, 42, 132, 0.12)',
+            transform: 'scale(1.05)',
+          },
+          '&:focus': {
+            outline: '3px solid rgba(78, 42, 132, 0.5)',
+            outlineOffset: '2px',
+          },
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&:nth-of-type(even)': {
+            backgroundColor: '#fafbfc', // Improved alternating row color
+          },
+          '&:hover': {
+            backgroundColor: 'rgba(78, 42, 132, 0.08) !important',
+            boxShadow: 'inset 4px 0 0 #4e2a84',
+            transition: 'all 0.2s ease-in-out',
+          },
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          transition: 'all 0.3s ease-in-out',
+          '&:hover': {
+            color: '#3a1f63 !important',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+          },
         },
       },
     },

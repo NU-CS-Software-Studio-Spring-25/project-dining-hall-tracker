@@ -338,8 +338,11 @@ export const MealsPage = () => {
                 currentMeals.map((meal, index) => (
                   <TableRow
                     key={meal.id}
-                    style={{
-                      backgroundColor: index % 2 === 0 ? "#fff" : "#f4f4f4",
+                    sx={{
+                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#fafbfc",
+                      '&:hover': {
+                        backgroundColor: 'rgba(78, 42, 132, 0.08) !important',
+                      }
                     }}
                   >
                     {user && (

@@ -25,8 +25,11 @@ export const NavBar = () => {
             flexGrow: 1, 
             textDecoration: 'none', 
             color: 'inherit',
+            transition: 'all 0.3s ease-in-out',
             '&:hover': {
-              opacity: 0.8
+              color: '#f0f0f0',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+              transform: 'scale(1.02)'
             }
           }}
         >

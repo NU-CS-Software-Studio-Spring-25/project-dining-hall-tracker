@@ -1,4 +1,4 @@
-import { Box, Typography, Link } from '@mui/material';
+import { Box, Typography, Link, Tooltip } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 export const Footer = () => {
@@ -64,25 +64,33 @@ export const Footer = () => {
             order: { xs: 2, md: 3 },
           }}
         >
-          <Link
-            href="https://github.com/NU-CS-Software-Studio-Spring-25/project-dining-hall-tracker"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              color: 'text.secondary',
-              textDecoration: 'none',
-              '&:hover': {
-                color: 'primary.main',
-              },
-            }}
-            aria-label="GitHub repository (opens in new tab)"
-          >
-            <GitHubIcon fontSize="small" />
-            <Typography variant="body2">GitHub</Typography>
-          </Link>
+          <Tooltip title="Visit our GitHub repository">
+            <Link
+              href="https://github.com/NU-CS-Software-Studio-Spring-25/project-dining-hall-tracker"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                color: 'text.secondary',
+                textDecoration: 'none',
+                transition: 'all 0.3s ease-in-out',
+                padding: '8px 12px',
+                borderRadius: '6px',
+                '&:hover': {
+                  color: '#3a1f63',
+                  backgroundColor: 'rgba(78, 42, 132, 0.08)',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                },
+              }}
+              aria-label="GitHub repository (opens in new tab)"
+            >
+              <GitHubIcon fontSize="small" />
+              <Typography variant="body2">GitHub</Typography>
+            </Link>
+          </Tooltip>
         </Box>
       </Box>
     </Box>

@@ -13,6 +13,7 @@ import {
   Grid,
   Paper,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -120,7 +121,9 @@ export const AdminPage = () => {
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <RestaurantMenuIcon sx={{ fontSize: 40, mr: 2 }} />
+                  <Tooltip title="Manage meals">
+                    <RestaurantMenuIcon sx={{ fontSize: 40, mr: 2 }} />
+                  </Tooltip>
                   <Typography variant='h5' component='h2'>
                     Manage Meals
                   </Typography>
@@ -145,7 +148,9 @@ export const AdminPage = () => {
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <StorefrontIcon sx={{ fontSize: 40, mr: 2 }} />
+                  <Tooltip title="Manage dining halls">
+                    <StorefrontIcon sx={{ fontSize: 40, mr: 2 }} />
+                  </Tooltip>
                   <Typography variant='h5' component='h2'>
                     Manage Dining Halls
                   </Typography>
