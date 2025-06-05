@@ -11,7 +11,7 @@ dining_halls = [
 ]
 
 dining_halls.each do |dining_hall_attributes|
-  DiningHall.create!(dining_hall_attributes)
+  DiningHall.find_or_create_by!(dining_hall_attributes)
 end
 
 # Array of meal names
