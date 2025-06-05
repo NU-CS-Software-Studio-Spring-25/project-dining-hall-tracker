@@ -161,6 +161,23 @@ const theme = createTheme({
             '& input': {
               backgroundColor: 'transparent',
               color: '#1a1a1a',
+              '&:-webkit-autofill': {
+                WebkitBoxShadow: '0 0 0 1000px #ffffff inset !important',
+                WebkitTextFillColor: '#1a1a1a !important',
+                backgroundColor: '#ffffff !important',
+              },
+              '&:-webkit-autofill:hover': {
+                WebkitBoxShadow: '0 0 0 1000px #ffffff inset !important',
+                WebkitTextFillColor: '#1a1a1a !important',
+              },
+              '&:-webkit-autofill:focus': {
+                WebkitBoxShadow: '0 0 0 1000px #ffffff inset !important',
+                WebkitTextFillColor: '#1a1a1a !important',
+              },
+              '&:-webkit-autofill:active': {
+                WebkitBoxShadow: '0 0 0 1000px #ffffff inset !important',
+                WebkitTextFillColor: '#1a1a1a !important',
+              },
             },
           },
           '& .MuiInputLabel-root': {
