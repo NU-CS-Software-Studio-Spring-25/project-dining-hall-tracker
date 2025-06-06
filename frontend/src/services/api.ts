@@ -7,11 +7,15 @@ const API_BASE_URL = isProduction
   : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1');
 
 // Helper function to get auth headers
-const getAuthHeaders = () => {
+const getAuthHeaders = (): Record<string, string> => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  return isAuthenticated ? {
-    'Authorization': 'Bearer admin123'
-  } : {};
+  const baseHeaders: Record<string, string> = {};
+  
+  if (isAuthenticated) {
+    baseHeaders['Authorization'] = 'Bearer admin123';
+  }
+  
+  return baseHeaders;
 };
 
 export const api = {
@@ -37,6 +41,22 @@ export const api = {
     const response = await fetch(`${API_BASE_URL}/dining_halls/${id}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch dining hall with id ${id}`);
+    }
+    return response.json();
+  },
+
+  async syncDiningData() {
+    const response = await fetch(`${API_BASE_URL}/dining_halls/sync`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to sync dining data');
     }
     return response.json();
   },

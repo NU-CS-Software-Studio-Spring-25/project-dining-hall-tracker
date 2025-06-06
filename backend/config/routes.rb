@@ -17,7 +17,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'health', to: 'health#index'
       get 'auth/me', to: 'auth#me'
-      resources :dining_halls, only: [:index, :show]
+      resources :dining_halls, only: [:index, :show] do
+        collection do
+          post :sync
+        end
+      end
       resources :meals
       resources :favorites, only: [:index, :create, :destroy]
     end

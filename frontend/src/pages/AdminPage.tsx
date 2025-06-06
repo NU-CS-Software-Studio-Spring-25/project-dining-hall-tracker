@@ -17,6 +17,9 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { DinnerDining, Sync } from '@mui/icons-material';
+import { useNotification } from '../contexts/NotificationContext';
+import { api } from '../services/api';
 
 export const AdminPage = () => {
   const [password, setPassword] = useState('');
@@ -24,6 +27,8 @@ export const AdminPage = () => {
   const [loading, setLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const { showSuccess, showError } = useNotification();
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Check if already authenticated
   useState(() => {
@@ -59,6 +64,19 @@ export const AdminPage = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
+  };
+
+  const handleSyncDiningData = async () => {
+    setIsSyncing(true);
+    try {
+      const response = await api.syncDiningData();
+      showSuccess(`Successfully synced ${response.meal_count} meals from Northwestern dining API!`);
+    } catch (error) {
+      console.error('Sync failed:', error);
+      showError('Failed to sync dining data. Please try again.');
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   if (!isAuthenticated) {
@@ -121,8 +139,36 @@ export const AdminPage = () => {
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Tooltip title="Sync dining data">
+                    <Sync sx={{ fontSize: 40, mr: 2 }} />
+                  </Tooltip>
+                  <Typography variant='h5' component='h2'>
+                    Sync Dining Data
+                  </Typography>
+                </Box>
+                <Typography variant='body1' color='text.secondary'>
+                  Fetch the latest menu data from Northwestern's dining API.
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size='small'
+                  color='primary'
+                  onClick={handleSyncDiningData}
+                  disabled={isSyncing}
+                >
+                  {isSyncing ? 'Syncing...' : 'Sync Now'}
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Card>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <Tooltip title="Manage meals">
-                    <RestaurantMenuIcon sx={{ fontSize: 40, mr: 2 }} />
+                    <DinnerDining sx={{ fontSize: 40, mr: 2 }} />
                   </Tooltip>
                   <Typography variant='h5' component='h2'>
                     Manage Meals

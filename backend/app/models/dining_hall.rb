@@ -3,4 +3,5 @@ class DiningHall < ApplicationRecord
   
   validates :name, presence: true, uniqueness: true
   validates :location, presence: true
+  validates :api_id, uniqueness: true, allow_nil: true
 end 

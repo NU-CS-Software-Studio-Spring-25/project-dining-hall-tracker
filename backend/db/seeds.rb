@@ -1,59 +1,84 @@
 # This file should ensure the existence of records required to run the application in every environment (production,
 # development, test). The code here can be run after initial install or after each database reset.
 #
-# Create dining halls
-dining_halls = [
-  { name: 'Allison', location: 'South Campus' },
-  { name: 'Plex West', location: 'South Campus' },
-  { name: 'Plex East', location: 'South Campus' },
-  { name: 'Sargent', location: 'North Campus' },
-  { name: 'Elder', location: 'North Campus' }
+require_relative '../app/services/northwestern_dining_api'
+
+puts "Starting to seed Northwestern dining data..."
+
+# Create Northwestern dining halls with their API IDs
+northwestern_dining_halls = [
+  { 
+    name: 'Allison Dining Commons', 
+    location: 'North Campus', 
+    api_id: '5b33ae291178e909d807593d' 
+  },
+  { 
+    name: 'Sargent Dining Commons', 
+    location: 'North Campus', 
+    api_id: '5b33ae291178e909d807593e' 
+  },
+  { 
+    name: 'Foster Walker Plex East', 
+    location: 'North Campus', 
+    api_id: '5bae7de3f3eeb60c7d3854ba' 
+  },
+  { 
+    name: 'Foster Walker Plex West', 
+    location: 'North Campus', 
+    api_id: '5bae7ee9f3eeb60cb4f8f3af' 
+  },
+  { 
+    name: 'Elder Dining Commons', 
+    location: 'North Campus', 
+    api_id: '5d113c924198d409c34fdf5c' 
+  }
 ]
 
-dining_halls.each do |dining_hall_attributes|
-  DiningHall.find_or_create_by!(dining_hall_attributes)
+# Create dining halls first
+northwestern_dining_halls.each do |dining_hall_attributes|
+  DiningHall.find_or_create_by!(name: dining_hall_attributes[:name]) do |dh|
+    dh.location = dining_hall_attributes[:location]
+    dh.api_id = dining_hall_attributes[:api_id]
+  end
 end
 
-# Array of meal names
-meal_names = [
-  'Grilled Chicken Breast', 'Vegetable Stir Fry', 'Beef Tacos', 'Mediterranean Quinoa Bowl',
-  'Roasted Turkey Sandwich', 'Caesar Salad', 'Margherita Pizza', 'Vegan Buddha Bowl',
-  'Pasta Primavera', 'Salmon Filet', 'BBQ Pulled Pork', 'Mushroom Risotto',
-  'Black Bean Burger', 'Greek Yogurt Parfait', 'Chicken Curry', 'Tofu Scramble',
-  'Lentil Soup', 'Tuna Melt', 'Falafel Wrap', 'Mac and Cheese',
-  'Beef Burger', 'Vegetable Lasagna', 'Grilled Cheese Sandwich', 'Spinach Omelette',
-  'Southwest Chicken Bowl', 'Pad Thai', 'Hummus Plate', 'Turkey Chili',
-  'Teriyaki Chicken', 'Garden Salad', 'Egg Sandwich', 'Burrito Bowl',
-  'Poke Bowl', 'Beef Stew', 'Eggplant Parmesan', 'French Toast',
-  'Chickpea Curry', 'Club Sandwich', 'Sushi Roll', 'Veggie Stir Fry'
-]
+puts "Created #{DiningHall.count} dining halls"
 
-# Create 40 meals and distribute them across dining halls
-dining_hall_ids = DiningHall.pluck(:id)
-serving_sizes = ['1 cup', '1 bowl', '1 plate', '8 oz', '6 oz', '12 oz', '1 sandwich', '1 burger', '1 slice', '1 wrap']
+# Clear existing meals to avoid duplicates
+Meal.destroy_all
 
-meal_names.each_with_index do |name, index|
-  # Assign to dining halls in a round-robin fashion
-  dining_hall_id = dining_hall_ids[index % dining_hall_ids.size]
+# Fetch real meal data from Northwestern's API
+puts "Fetching actual meal data from Northwestern dining API..."
+api_meals = NorthwesternDiningApi.fetch_all_meals_today
+
+if api_meals.any?
+  puts "Found #{api_meals.count} meals from API"
   
-  # Generate random nutritional values
-  protein = rand(5.0..40.0).round(1)
-  carbs = rand(10.0..80.0).round(1)
-  fat = rand(2.0..30.0).round(1)
-  fiber = rand(0.0..15.0).round(1)
-  calories = (protein * 4 + carbs * 4 + fat * 9).round
-  serving_size = serving_sizes.sample
+  api_meals.each do |meal_data|
+    # Find the corresponding dining hall
+    dining_hall = DiningHall.find_by(name: meal_data[:dining_hall_name])
+    
+    if dining_hall
+      # Create meal with real data
+      Meal.create!(
+        name: meal_data[:name],
+        protein: meal_data[:protein],
+        carbs: meal_data[:carbs],
+        fat: meal_data[:fat],
+        fiber: meal_data[:fiber],
+        calories: meal_data[:calories],
+        serving_size: meal_data[:serving_size],
+        dining_hall_id: dining_hall.id
+      )
+    else
+      puts "Warning: Could not find dining hall for #{meal_data[:dining_hall_name]}"
+    end
+  end
   
-  Meal.create!(
-    name: name,
-    protein: protein,
-    carbs: carbs,
-    fat: fat,
-    fiber: fiber,
-    calories: calories,
-    serving_size: serving_size,
-    dining_hall_id: dining_hall_id
-  )
+  puts "Successfully created #{Meal.count} meals from API data!"
+else
+  puts "No meals found from API. The dining halls may be closed or the API may be temporarily unavailable."
+  puts "Try running the seed again later or use the sync endpoint to refresh data."
 end
 
-puts "Created #{DiningHall.count} dining halls and #{Meal.count} meals!"
+puts "Seeding complete! Created #{DiningHall.count} dining halls and #{Meal.count} meals!"
