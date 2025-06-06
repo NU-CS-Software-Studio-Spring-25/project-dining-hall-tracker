@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import StorefrontIcon from '@mui/icons-material/Storefront';
@@ -31,12 +31,12 @@ export const AdminPage = () => {
   const [isSyncing, setIsSyncing] = useState(false);
 
   // Check if already authenticated
-  useState(() => {
+  useEffect(() => {
     const auth = localStorage.getItem('isAuthenticated');
     if (auth === 'true') {
       setIsAuthenticated(true);
     }
-  });
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

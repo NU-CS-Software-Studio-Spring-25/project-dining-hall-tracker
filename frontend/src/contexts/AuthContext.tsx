@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
 interface User {
   id: number;
@@ -37,16 +38,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/v1/auth/me', {
+      // Use the correct API URL based on environment
+      const apiUrl = import.meta.env.PROD 
+        ? '/api/v1/auth/me' 
+        : 'http://localhost:3000/api/v1/auth/me';
+        
+      const response = await fetch(apiUrl, {
         credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
       
       if (response.ok) {
         const userData = await response.json();
         setUser(userData.user);
+      } else if (response.status === 401) {
+        // User not authenticated, this is normal
+        setUser(null);
+      } else {
+        console.warn('Auth check failed with status:', response.status);
+        setUser(null);
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.warn('Auth check failed (this is normal on first visit):', error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -55,10 +72,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/users/sign_in', {
+      // Use the correct Devise sign-in endpoint
+      const apiUrl = import.meta.env.PROD 
+        ? '/users/sign_in' 
+        : 'http://localhost:3000/users/sign_in';
+        
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
@@ -92,25 +115,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:3000/users/sign_out', {
+      const apiUrl = import.meta.env.PROD 
+        ? '/users/sign_out' 
+        : 'http://localhost:3000/users/sign_out';
+        
+      await fetch(apiUrl, {
         method: 'DELETE',
         credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
       
       setUser(null);
+      
+      // Also clear any admin localStorage state
+      localStorage.removeItem('isAuthenticated');
     } catch (error) {
       console.error('Logout error:', error);
       setUser(null);
+      // Clear local state even if logout request fails
+      localStorage.removeItem('isAuthenticated');
     }
   };
 
   const signup = async (email: string, password: string, passwordConfirmation: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/users', {
+      const apiUrl = import.meta.env.PROD 
+        ? '/users' 
+        : 'http://localhost:3000/users';
+        
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({

@@ -6,16 +6,12 @@ const API_BASE_URL = isProduction
   ? '/api/v1' 
   : (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1');
 
-// Helper function to get auth headers
-const getAuthHeaders = (): Record<string, string> => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  const baseHeaders: Record<string, string> = {};
-  
-  if (isAuthenticated) {
-    baseHeaders['Authorization'] = 'Bearer admin123';
-  }
-  
-  return baseHeaders;
+// Helper function to get common headers
+const getHeaders = (): Record<string, string> => {
+  return {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
 };
 
 export const api = {
@@ -50,7 +46,7 @@ export const api = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...getAuthHeaders()
+        ...getHeaders()
       },
     });
     
@@ -91,7 +87,7 @@ export const api = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...getAuthHeaders()
+        ...getHeaders()
       },
       body: JSON.stringify({ meal: mealData }),
     });
@@ -108,7 +104,7 @@ export const api = {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        ...getAuthHeaders()
+        ...getHeaders()
       },
       body: JSON.stringify({ meal: mealData }),
     });
@@ -123,7 +119,7 @@ export const api = {
   async deleteMeal(id: number) {
     const response = await fetch(`${API_BASE_URL}/meals/${id}`, {
       method: 'DELETE',
-      headers: getAuthHeaders()
+      headers: getHeaders()
     });
     
     if (!response.ok) {

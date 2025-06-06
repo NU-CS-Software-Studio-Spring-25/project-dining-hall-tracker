@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { ThemeProvider, createTheme, CssBaseline, Alert, Snackbar } from '@mui/material'
+import { ThemeProvider, createTheme, CssBaseline, Alert, Snackbar, Container, Box, CircularProgress, Typography } from '@mui/material'
 import { api } from './services/api'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { FavoritesProvider } from './contexts/FavoritesContext'
 import { NotificationProvider } from './contexts/NotificationContext'
 import { NavBar } from './components/NavBar'
@@ -221,6 +221,59 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Loading wrapper to handle auth initialization
+const AppContent = () => {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 8 }}>
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '50vh'
+          }}
+        >
+          <CircularProgress size={40} sx={{ mb: 2 }} />
+          <Typography variant="h6" color="text.secondary">
+            Loading PurplePlate...
+          </Typography>
+        </Box>
+      </Container>
+    );
+  }
+
+  return (
+    <>
+      <NavBar />
+      <main style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/meals" element={<MealsPage />} />
+          <Route path="/dining-halls" element={<DiningHallsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route 
+            path="/admin/meals" 
+            element={
+              <ProtectedRoute>
+                <AdminMealsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+    </>
+  );
+};
+
 function App() {
   console.log('App component function is executing')
   
@@ -264,28 +317,7 @@ function App() {
           <FavoritesProvider>
             <Router>
               <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                <NavBar />
-                <main style={{ flex: 1 }}>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/meals" element={<MealsPage />} />
-                    <Route path="/dining-halls" element={<DiningHallsPage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/admin" element={<AdminPage />} />
-                    <Route 
-                      path="/admin/meals" 
-                      element={
-                        <ProtectedRoute>
-                          <AdminMealsPage />
-                        </ProtectedRoute>
-                      } 
-                    />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-                <Footer />
+                <AppContent />
                 <Snackbar open={showApiError} autoHideDuration={6000} onClose={() => setShowApiError(false)}>
                   <Alert severity="error" sx={{ width: '100%' }} onClose={() => setShowApiError(false)}>
                     {apiStatus}

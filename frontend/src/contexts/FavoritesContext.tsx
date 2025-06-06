@@ -12,9 +12,9 @@ interface Favorite {
 interface FavoritesContextType {
   favorites: Favorite[];
   isLoading: boolean;
-  addFavorite: (mealName: string) => Promise<void>;
-  removeFavorite: (favoriteId: number) => Promise<void>;
   isFavorite: (mealName: string) => boolean;
+  addFavorite: (mealName: string) => Promise<void>;
+  removeFavorite: (mealName: string) => Promise<void>;
   toggleFavorite: (mealName: string) => Promise<void>;
   refreshFavorites: () => Promise<void>;
 }
@@ -32,6 +32,17 @@ export const useFavorites = () => {
 interface FavoritesProviderProps {
   children: ReactNode;
 }
+
+// Get the base URL for API calls
+const getBaseUrl = () => {
+  if (import.meta.env.PROD) {
+    // In production, use relative URLs (same domain as the app)
+    return '';
+  } else {
+    // In development, use localhost
+    return 'http://localhost:3000';
+  }
+};
 
 export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }) => {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
@@ -52,8 +63,13 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/v1/favorites', {
+      const baseUrl = getBaseUrl();
+      const response = await fetch(`${baseUrl}/api/v1/favorites`, {
         credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
       if (response.ok) {
@@ -71,10 +87,12 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
     if (!user) return;
 
     try {
-      const response = await fetch('http://localhost:3000/api/v1/favorites', {
+      const baseUrl = getBaseUrl();
+      const response = await fetch(`${baseUrl}/api/v1/favorites`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         credentials: 'include',
         body: JSON.stringify({
@@ -98,21 +116,25 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
     }
   };
 
-  const removeFavorite = async (favoriteId: number) => {
+  const removeFavorite = async (mealName: string) => {
     if (!user) return;
 
-    // Find the meal name for the notification
-    const favorite = favorites.find(fav => fav.id === favoriteId);
-    const mealName = favorite?.meal_name || 'meal';
+    const favorite = favorites.find((f) => f.meal_name === mealName);
+    if (!favorite) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/v1/favorites/${favoriteId}`, {
+      const baseUrl = getBaseUrl();
+      const response = await fetch(`${baseUrl}/api/v1/favorites/${favorite.id}`, {
         method: 'DELETE',
         credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
       if (response.ok) {
-        setFavorites((prev) => prev.filter((fav) => fav.id !== favoriteId));
+        setFavorites((prev) => prev.filter((f) => f.id !== favorite.id));
         showSuccess(`Removed "${mealName}" from favorites!`);
       } else {
         throw new Error('Failed to remove favorite');
@@ -124,15 +146,13 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
     }
   };
 
-  const isFavorite = (mealName: string): boolean => {
-    return favorites.some((fav) => fav.meal_name === mealName);
+  const isFavorite = (mealName: string) => {
+    return favorites.some((favorite) => favorite.meal_name === mealName);
   };
 
   const toggleFavorite = async (mealName: string) => {
-    const existingFavorite = favorites.find((fav) => fav.meal_name === mealName);
-    
-    if (existingFavorite) {
-      await removeFavorite(existingFavorite.id);
+    if (isFavorite(mealName)) {
+      await removeFavorite(mealName);
     } else {
       await addFavorite(mealName);
     }
@@ -141,9 +161,9 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
   const value = {
     favorites,
     isLoading,
+    isFavorite,
     addFavorite,
     removeFavorite,
-    isFavorite,
     toggleFavorite,
     refreshFavorites,
   };

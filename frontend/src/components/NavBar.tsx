@@ -1,10 +1,10 @@
-import { AppBar, Toolbar, Typography, Button, Box, Tooltip } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box, Tooltip, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export const NavBar = () => {
-  const { user, logout } = useAuth();
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const { user, logout, isLoading } = useAuth();
+  const isAdminAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
   const handleLogout = async () => {
     try {
@@ -12,6 +12,11 @@ export const NavBar = () => {
     } catch (error) {
       console.error('Logout failed:', error);
     }
+  };
+
+  const handleAdminLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    window.location.reload(); // Refresh to update admin state
   };
 
   return (
@@ -35,7 +40,7 @@ export const NavBar = () => {
         >
           PurplePlate
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Tooltip title="Return to homepage">
             <Button color="inherit" component={Link} to="/">
               Home
@@ -52,40 +57,56 @@ export const NavBar = () => {
             </Button>
           </Tooltip>
           
-          {user ? (
-            <>
-              <Tooltip title="View your favorite meals and profile">
-                <Button color="inherit" component={Link} to="/profile">
-                  Profile
-                </Button>
-              </Tooltip>
-              <Tooltip title="Sign out of your account">
-                <Button color="inherit" onClick={handleLogout}>
-                  Logout
-                </Button>
-              </Tooltip>
-            </>
+          {/* Show loading spinner during auth check */}
+          {isLoading ? (
+            <CircularProgress size={20} color="inherit" />
           ) : (
             <>
-              <Tooltip title="Sign in to save favorites">
-                <Button color="inherit" component={Link} to="/login">
-                  Login
-                </Button>
-              </Tooltip>
-              <Tooltip title="Create a new account">
-                <Button color="inherit" component={Link} to="/signup">
-                  Sign Up
-                </Button>
-              </Tooltip>
+              {/* Regular user authentication */}
+              {user ? (
+                <>
+                  <Tooltip title="View your favorite meals and profile">
+                    <Button color="inherit" component={Link} to="/profile">
+                      Profile
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Sign out of your account">
+                    <Button color="inherit" onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </Tooltip>
+                </>
+              ) : (
+                <>
+                  <Tooltip title="Sign in to save favorites">
+                    <Button color="inherit" component={Link} to="/login">
+                      Login
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Create a new account">
+                    <Button color="inherit" component={Link} to="/signup">
+                      Sign Up
+                    </Button>
+                  </Tooltip>
+                </>
+              )}
+              
+              {/* Admin authentication (separate system) */}
+              {isAdminAuthenticated && (
+                <>
+                  <Tooltip title="Manage meals and dining halls">
+                    <Button color="inherit" component={Link} to="/admin">
+                      Admin
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title="Sign out of admin account">
+                    <Button color="inherit" onClick={handleAdminLogout} sx={{ ml: 1 }}>
+                      Admin Logout
+                    </Button>
+                  </Tooltip>
+                </>
+              )}
             </>
-          )}
-          
-          {isAuthenticated && (
-            <Tooltip title="Manage meals and dining halls">
-              <Button color="inherit" component={Link} to="/admin">
-                Admin
-              </Button>
-            </Tooltip>
           )}
         </Box>
       </Toolbar>
