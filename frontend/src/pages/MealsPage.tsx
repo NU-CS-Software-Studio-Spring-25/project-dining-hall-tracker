@@ -202,7 +202,7 @@ export const MealsPage = () => {
           <TextField
             label="Minimum Amount"
             type="number"
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0, maxLength: 6 }}
             value={filter.amount}
             onChange={(e) =>
               setFilter({ ...filter, amount: Number(e.target.value) })
@@ -340,14 +340,20 @@ export const MealsPage = () => {
                     key={meal.id}
                     sx={{
                       backgroundColor: index % 2 === 0 ? "#ffffff" : "#fafbfc",
-                      '&:hover': {
-                        backgroundColor: 'rgba(78, 42, 132, 0.08) !important',
-                      }
+                      "&:hover": {
+                        backgroundColor: "rgba(78, 42, 132, 0.08) !important",
+                      },
                     }}
                   >
                     {user && (
                       <TableCell>
-                        <Tooltip title={isFavorite(meal.name) ? "Remove from favorites" : "Add to favorites"}>
+                        <Tooltip
+                          title={
+                            isFavorite(meal.name)
+                              ? "Remove from favorites"
+                              : "Add to favorites"
+                          }
+                        >
                           <IconButton
                             onClick={() => handleFavoriteClick(meal.name)}
                             color="primary"

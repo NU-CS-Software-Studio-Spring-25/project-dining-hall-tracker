@@ -91,7 +91,7 @@ export const MealForm = ({
 
   const MAX_CARBS_FAT_FIBER = 300;
   const MAX_CALORIES = 3000;
-  const MAX_SERVING_SIZE_LENGTH = 25;
+  const MAX_SERVING_SIZE_LENGTH = 30;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -164,6 +164,7 @@ export const MealForm = ({
             name="name"
             value={formData.name}
             onChange={handleChange}
+            inputProps={{ maxLength: 255 }}
           />
 
           <TextField

@@ -1,26 +1,34 @@
-import { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography, Box, Alert } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useState } from "react";
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
       await login(email, password);
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }
@@ -32,7 +40,7 @@ export const LoginPage = () => {
         <Typography variant="h4" component="h1" gutterBottom textAlign="center">
           Sign In to PurplePlate
         </Typography>
-        
+
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -49,8 +57,9 @@ export const LoginPage = () => {
             margin="normal"
             required
             autoFocus
+            inputProps={{ maxLength: 255 }}
           />
-          
+
           <TextField
             fullWidth
             label="Password"
@@ -59,6 +68,7 @@ export const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             margin="normal"
             required
+            inputProps={{ maxLength: 255 }}
           />
 
           <Button
@@ -68,13 +78,13 @@ export const LoginPage = () => {
             disabled={loading}
             sx={{ mt: 3, mb: 2 }}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? "Signing In..." : "Sign In"}
           </Button>
 
           <Box textAlign="center">
             <Typography variant="body2">
-              Don't have an account?{' '}
-              <Link to="/signup" style={{ textDecoration: 'none' }}>
+              Don't have an account?{" "}
+              <Link to="/signup" style={{ textDecoration: "none" }}>
                 Sign up here
               </Link>
             </Typography>

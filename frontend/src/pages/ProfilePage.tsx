@@ -65,9 +65,9 @@ export const ProfilePage = () => {
   }, [favorites, allMeals]);
   */
 
-  const handleRemoveFavorite = async (favoriteId: number) => {
+  const handleRemoveFavorite = async (mealName: string) => {
     try {
-      await removeFavorite(favoriteId);
+      await removeFavorite(mealName);
     } catch (error) {
       console.error("Failed to remove favorite:", error);
     }
@@ -106,8 +106,8 @@ export const ProfilePage = () => {
         ) : favoriteMeals.length > 0 ? (
           <Box
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
               gap: 2,
             }}
           >
@@ -163,7 +163,7 @@ export const ProfilePage = () => {
                   />
                   <Tooltip title="Remove from favorites">
                     <IconButton
-                      onClick={() => handleRemoveFavorite(favorite.id)}
+                      onClick={() => handleRemoveFavorite(favorite.meal_name)}
                       size="small"
                       color="error"
                     >

@@ -24,10 +24,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_002623) do
 
   create_table "favorites", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "meal_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["meal_name"], name: "index_favorites_on_meal_name"
+    t.bigint "meal_id", null: false
+    t.index ["meal_id"], name: "index_favorites_on_meal_id"
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
@@ -50,8 +50,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_002623) do
     t.bigint "dining_hall_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "description"
-    t.text "ingredients"
     t.index ["dining_hall_id"], name: "index_meals_on_dining_hall_id"
   end
 
@@ -67,5 +65,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_06_002623) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "favorites", "meals"
+  add_foreign_key "favorites", "users"
   add_foreign_key "meals", "dining_halls"
 end

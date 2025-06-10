@@ -1,23 +1,31 @@
-import { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography, Box, Alert } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useState } from "react";
+import {
+  Container,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Alert,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export const SignupPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (password !== passwordConfirmation) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
@@ -25,9 +33,9 @@ export const SignupPage = () => {
 
     try {
       await signup(email, password, passwordConfirmation);
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Signup failed');
+      setError(err instanceof Error ? err.message : "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -39,7 +47,7 @@ export const SignupPage = () => {
         <Typography variant="h4" component="h1" gutterBottom textAlign="center">
           Join PurplePlate
         </Typography>
-        
+
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -56,8 +64,9 @@ export const SignupPage = () => {
             margin="normal"
             required
             autoFocus
+            inputProps={{ maxLength: 255 }}
           />
-          
+
           <TextField
             fullWidth
             label="Password"
@@ -66,6 +75,7 @@ export const SignupPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             margin="normal"
             required
+            inputProps={{ maxLength: 255 }}
           />
 
           <TextField
@@ -76,6 +86,7 @@ export const SignupPage = () => {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
             margin="normal"
             required
+            inputProps={{ maxLength: 255 }}
           />
 
           <Button
@@ -85,13 +96,13 @@ export const SignupPage = () => {
             disabled={loading}
             sx={{ mt: 3, mb: 2 }}
           >
-            {loading ? 'Creating Account...' : 'Sign Up'}
+            {loading ? "Creating Account..." : "Sign Up"}
           </Button>
 
           <Box textAlign="center">
             <Typography variant="body2">
-              Already have an account?{' '}
-              <Link to="/login" style={{ textDecoration: 'none' }}>
+              Already have an account?{" "}
+              <Link to="/login" style={{ textDecoration: "none" }}>
                 Sign in here
               </Link>
             </Typography>
