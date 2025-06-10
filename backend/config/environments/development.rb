@@ -37,7 +37,22 @@ Rails.application.configure do
 
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: ENV['HOST'] || 'dining-finder-app.herokuapp.com' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'herokuapp.com',
+    user_name: ENV['GMAIL_USERNAME'],  # your Gmail address
+    password: ENV['GMAIL_PASSWORD'],   # an App Password (not your Gmail login)
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+  config.action_mailer.default_options = { from: ENV['GMAIL_USERNAME'] }
 
+  
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

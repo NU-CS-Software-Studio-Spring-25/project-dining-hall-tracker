@@ -7,6 +7,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
 
     if resource.save
+      UserMailer.with(user: @user).welcome_email.deliver_later
       yield resource if block_given?
       if resource.persisted?
         if resource.active_for_authentication?
