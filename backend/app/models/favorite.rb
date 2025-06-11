@@ -1,11 +1,5 @@
 class Favorite < ApplicationRecord
   belongs_to :user
-  belongs_to :meal
 
-  validates :meal_id, uniqueness: { scope: :user_id }
-
-  def meal_name
-    meal&.name
-  end
-  
+  validates :meal_name, presence: true, uniqueness: { scope: :user_id }
 end
