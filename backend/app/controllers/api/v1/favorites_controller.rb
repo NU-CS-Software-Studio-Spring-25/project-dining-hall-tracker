@@ -26,6 +26,20 @@ class Api::V1::FavoritesController < ApplicationController
       return
     end
     
+    # Check if already favorited
+    existing_favorite = current_user.favorites.find_by(meal_id: meal.id)
+    if existing_favorite
+      render json: {
+        message: 'Meal already favorited',
+        favorite: {
+          id: existing_favorite.id,
+          meal_name: existing_favorite.meal_name,
+          created_at: existing_favorite.created_at
+        }
+      }, status: :ok
+      return
+    end
+    
     favorite = current_user.favorites.build(meal_id: meal.id)
     
     if favorite.save
@@ -43,6 +57,13 @@ class Api::V1::FavoritesController < ApplicationController
         errors: favorite.errors.full_messages
       }, status: :unprocessable_entity
     end
+  rescue => e
+    Rails.logger.error "Error creating favorite: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    render json: {
+      message: 'Internal server error',
+      errors: [e.message]
+    }, status: :internal_server_error
   end
 
   def destroy
