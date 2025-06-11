@@ -11,6 +11,7 @@ namespace :favorites do
                 foodname: favorite.meal_name, 
                 dininghall: dining_hall.name
               ).favorites_email.deliver_later
+              sleep(2)
               break # only send one email per user per day
             end
           end
