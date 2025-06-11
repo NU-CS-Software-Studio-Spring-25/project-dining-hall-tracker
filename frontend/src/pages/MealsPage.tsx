@@ -164,6 +164,19 @@ export const MealsPage = () => {
     }
   });
 
+  // Deduplicate meals by name and dining hall combination
+  const uniqueMeals = (() => {
+    const uniqueMealsMap = new Map();
+    sortedMeals.forEach(meal => {
+      // Create a unique key combining meal name and dining hall
+      const uniqueKey = `${meal.name}_${meal.dining_hall?.name || meal.dining_hall_id}`;
+      if (!uniqueMealsMap.has(uniqueKey)) {
+        uniqueMealsMap.set(uniqueKey, meal);
+      }
+    });
+    return Array.from(uniqueMealsMap.values());
+  })();
+
   const favoriteMeals = meals.filter((meal) => isFavorite(meal.name));
 
   // Pagination of Food items
@@ -171,7 +184,7 @@ export const MealsPage = () => {
   const itemsPerPage = 20;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentMeals = sortedMeals.slice(indexOfFirstItem, indexOfLastItem);
+  const currentMeals = uniqueMeals.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -440,7 +453,7 @@ export const MealsPage = () => {
             value={currentPage}
             onChange={(e) => {
               const value = parseInt(e.target.value);
-              const maxPage = Math.ceil(sortedMeals.length / itemsPerPage);
+              const maxPage = Math.ceil(uniqueMeals.length / itemsPerPage);
               
               if (isNaN(value) || value < 1) {
                 setCurrentPage(1);
@@ -452,13 +465,13 @@ export const MealsPage = () => {
             }}
             inputProps={{
               min: 1,
-              max: Math.ceil(sortedMeals.length / itemsPerPage),
+              max: Math.ceil(uniqueMeals.length / itemsPerPage),
               style: { width: "60px", textAlign: "center" },
             }}
             sx={{ width: "80px" }}
           />
           <Typography>
-            of {Math.ceil(sortedMeals.length / itemsPerPage)}
+            of {Math.ceil(uniqueMeals.length / itemsPerPage)}
           </Typography>
         </Box>
 
@@ -466,11 +479,11 @@ export const MealsPage = () => {
           variant="outlined"
           onClick={() =>
             setCurrentPage((p) =>
-              Math.min(p + 1, Math.ceil(sortedMeals.length / itemsPerPage))
+              Math.min(p + 1, Math.ceil(uniqueMeals.length / itemsPerPage))
             )
           }
           disabled={
-            currentPage === Math.ceil(sortedMeals.length / itemsPerPage)
+            currentPage === Math.ceil(uniqueMeals.length / itemsPerPage)
           }
         >
           Next

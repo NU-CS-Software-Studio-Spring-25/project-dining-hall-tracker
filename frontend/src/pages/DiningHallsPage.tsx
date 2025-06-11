@@ -157,63 +157,76 @@ export const DiningHallsPage = () => {
                   gap: 3,
                 }}
               >
-                {selectedDiningHall.meals.map((meal) => (
-                  <Card key={meal.id}>
-                    <CardContent>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          gutterBottom
-                          sx={{ flex: 1 }}
+                {(() => {
+                  // Create a Map to deduplicate meals by name within this dining hall
+                  const uniqueMealsMap = new Map();
+                  selectedDiningHall.meals.forEach(meal => {
+                    if (!uniqueMealsMap.has(meal.name)) {
+                      uniqueMealsMap.set(meal.name, meal);
+                    }
+                  });
+                  
+                  // Convert Map values back to array for rendering
+                  const uniqueMeals = Array.from(uniqueMealsMap.values());
+                  
+                  return uniqueMeals.map((meal) => (
+                    <Card key={meal.id}>
+                      <CardContent>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "flex-start",
+                            justifyContent: "space-between",
+                          }}
                         >
-                          {meal.name}
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ flex: 1 }}
+                          >
+                            {meal.name}
+                          </Typography>
+                          {user && (
+                            <Tooltip title={isFavorite(meal.name) ? "Remove from favorites" : "Add to favorites"}>
+                              <IconButton
+                                onClick={() => handleFavoriteClick(meal.name)}
+                                color="primary"
+                                size="small"
+                              >
+                                {isFavorite(meal.name) ? <Star /> : <StarBorder />}
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                        </Box>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          Serving Size: {meal.serving_size}
                         </Typography>
-                        {user && (
-                          <Tooltip title={isFavorite(meal.name) ? "Remove from favorites" : "Add to favorites"}>
-                            <IconButton
-                              onClick={() => handleFavoriteClick(meal.name)}
-                              color="primary"
-                              size="small"
-                            >
-                              {isFavorite(meal.name) ? <Star /> : <StarBorder />}
-                            </IconButton>
-                          </Tooltip>
-                        )}
-                      </Box>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        Serving Size: {meal.serving_size}
-                      </Typography>
-                      <Divider sx={{ my: 1 }} />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: 1,
-                          mt: 2,
-                        }}
-                      >
-                        <Chip label={`Protein: ${meal.protein}g`} />
-                        <Chip label={`Carbs: ${meal.carbs}g`} />
-                        <Chip label={`Fat: ${meal.fat}g`} />
-                        <Chip label={`Fiber: ${meal.fiber}g`} />
-                        <Chip
-                          label={`Calories: ${meal.calories}`}
-                          color="primary"
-                        />
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))}
+                        <Divider sx={{ my: 1 }} />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: 1,
+                            mt: 2,
+                          }}
+                        >
+                          <Chip label={`Protein: ${meal.protein}g`} />
+                          <Chip label={`Carbs: ${meal.carbs}g`} />
+                          <Chip label={`Fat: ${meal.fat}g`} />
+                          <Chip label={`Fiber: ${meal.fiber}g`} />
+                          <Chip
+                            label={`Calories: ${meal.calories}`}
+                            color="primary"
+                          />
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  ));
+                })()}
               </Box>
             ) : (
               <Typography>No meals available for this dining hall.</Typography>
