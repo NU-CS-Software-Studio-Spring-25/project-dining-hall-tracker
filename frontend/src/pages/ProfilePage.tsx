@@ -96,7 +96,7 @@ export const ProfilePage = () => {
 
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
-          Favorite Meals ({favorites.length}/20)  
+          Favorite Meals ({favorites.length}/20)
         </Typography>
 
         {isLoading || loadingMeals ? (
@@ -123,6 +123,15 @@ export const ProfilePage = () => {
                     <Typography variant="h6" sx={{ flex: 1 }}>
                       {meal.name}
                     </Typography>
+                    <Tooltip title="Remove from favorites">
+                      <IconButton
+                        onClick={() => handleRemoveFavorite(meal.name)}
+                        size="small"
+                        color="error"
+                      >
+                        <Delete />
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                   <Typography
                     variant="body2"
