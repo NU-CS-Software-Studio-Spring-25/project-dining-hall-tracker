@@ -51,7 +51,6 @@ export const ProfilePage = () => {
     }
   }, [user]);
 
-  /*
   useEffect(() => {
     // Match favorite meal names with actual meal data to get macros
     const matchedMeals = favorites
@@ -63,7 +62,6 @@ export const ProfilePage = () => {
 
     setFavoriteMeals(matchedMeals);
   }, [favorites, allMeals]);
-  */
 
   const handleRemoveFavorite = async (mealName: string) => {
     try {

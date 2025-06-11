@@ -47,6 +47,9 @@ export const MealsPage = () => {
   // State for sorting
   const [orderBy, setOrderBy] = useState<keyof Meal>("name");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
+  
+  // State for search
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Nutrient options for dropdown
   const nutrientOptions = [
@@ -134,10 +137,20 @@ export const MealsPage = () => {
     setOrderBy(property);
   };
 
-  // Filter meals by favorites if needed
-  const filteredMeals = showFavoritesOnly
-    ? meals.filter((meal) => isFavorite(meal.name))
-    : meals;
+  // Filter meals by favorites and search query
+  const filteredMeals = meals.filter((meal) => {
+    // Apply favorites filter if needed
+    if (showFavoritesOnly && !isFavorite(meal.name)) {
+      return false;
+    }
+    
+    // Apply search filter
+    if (searchQuery) {
+      return meal.name.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    
+    return true;
+  });
 
   // Sort function for client-side sorting
   const sortedMeals = [...filteredMeals].sort((a, b) => {
@@ -173,6 +186,22 @@ export const MealsPage = () => {
       )}
 
       <Paper sx={{ p: 3, mb: 4 }}>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Search Meals
+          </Typography>
+          <TextField
+            fullWidth
+            label="Search by meal name"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Type to search..."
+            sx={{ maxWidth: 500 }}
+          />
+        </Box>
+        
+        <Divider sx={{ my: 3 }} />
+        
         <Typography variant="h6" gutterBottom>
           Filter by Nutrition
         </Typography>
@@ -386,19 +415,55 @@ export const MealsPage = () => {
         </TableContainer>
       )}
 
-      <div style={{ marginTop: "1rem", textAlign: "center" }}>
-        <button
+      <Box
+        sx={{
+          mt: 3,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <Button
+          variant="outlined"
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
           Previous
-        </button>
+        </Button>
 
-        <span style={{ margin: "0 1rem" }}>
-          Page {currentPage} of {Math.ceil(sortedMeals.length / itemsPerPage)}
-        </span>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography>Page</Typography>
+          <TextField
+            type="number"
+            size="small"
+            value={currentPage}
+            onChange={(e) => {
+              const value = parseInt(e.target.value);
+              const maxPage = Math.ceil(sortedMeals.length / itemsPerPage);
+              
+              if (isNaN(value) || value < 1) {
+                setCurrentPage(1);
+              } else if (value > maxPage) {
+                setCurrentPage(maxPage);
+              } else {
+                setCurrentPage(value);
+              }
+            }}
+            inputProps={{
+              min: 1,
+              max: Math.ceil(sortedMeals.length / itemsPerPage),
+              style: { width: "60px", textAlign: "center" },
+            }}
+            sx={{ width: "80px" }}
+          />
+          <Typography>
+            of {Math.ceil(sortedMeals.length / itemsPerPage)}
+          </Typography>
+        </Box>
 
-        <button
+        <Button
+          variant="outlined"
           onClick={() =>
             setCurrentPage((p) =>
               Math.min(p + 1, Math.ceil(sortedMeals.length / itemsPerPage))
@@ -409,8 +474,8 @@ export const MealsPage = () => {
           }
         >
           Next
-        </button>
-      </div>
+        </Button>
+      </Box>
     </Container>
   );
 };
