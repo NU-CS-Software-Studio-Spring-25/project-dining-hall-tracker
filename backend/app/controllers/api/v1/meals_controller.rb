@@ -54,6 +54,36 @@ module Api
         head :no_content
       end
 
+      def download
+        # Get all meals with their dining halls
+        meals = Meal.includes(:dining_hall).all
+        
+        # Group meals by dining hall
+        meals_by_dining_hall = meals.group_by { |meal| meal.dining_hall.name }
+        
+        # Format the data
+        formatted_data = meals_by_dining_hall.transform_values do |hall_meals|
+          hall_meals.map do |meal|
+            {
+              id: meal.id,
+              name: meal.name,
+              protein: meal.protein,
+              carbs: meal.carbs,
+              fat: meal.fat,
+              fiber: meal.fiber,
+              calories: meal.calories,
+              serving_size: meal.serving_size
+            }
+          end
+        end
+
+        # Set response headers for file download
+        response.headers['Content-Disposition'] = 'attachment; filename="meals.json"'
+        response.headers['Content-Type'] = 'application/json'
+        
+        render json: formatted_data
+      end
+
       private
 
       def meal_params

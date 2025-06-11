@@ -23,7 +23,11 @@ Rails.application.routes.draw do
           post :sync
         end
       end
-      resources :meals
+      resources :meals do
+        collection do
+          get :download
+        end
+      end
       resources :favorites, only: [:index, :create, :destroy]
     end
   end

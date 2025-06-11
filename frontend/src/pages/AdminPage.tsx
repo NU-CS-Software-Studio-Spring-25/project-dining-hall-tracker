@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import StorefrontIcon from "@mui/icons-material/Storefront";
+import DownloadIcon from "@mui/icons-material/Download";
 import {
   Box,
   Button,
@@ -29,6 +30,7 @@ export const AdminPage = () => {
   const navigate = useNavigate();
   const { showSuccess, showError } = useNotification();
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Check if already authenticated
   useEffect(() => {
@@ -78,6 +80,19 @@ export const AdminPage = () => {
       showError("Failed to sync dining data. Please try again.");
     } finally {
       setIsSyncing(false);
+    }
+  };
+
+  const handleDownloadMeals = async () => {
+    setIsDownloading(true);
+    try {
+      await api.downloadMeals();
+      showSuccess("Successfully downloaded meals data!");
+    } catch (error) {
+      console.error("Download failed:", error);
+      showError("Failed to download meals data. Please try again.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -137,10 +152,21 @@ export const AdminPage = () => {
       </Box>
 
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={3}>
+        <Grid 
+          container 
+          spacing={3} 
+          sx={{ 
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)'
+            },
+            gap: 3
+          }}
+        >
           <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <Tooltip title="Sync dining data">
                     <Sync sx={{ fontSize: 40, mr: 2 }} />
@@ -167,8 +193,8 @@ export const AdminPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <Tooltip title="Manage meals">
                     <DinnerDining sx={{ fontSize: 40, mr: 2 }} />
@@ -194,8 +220,8 @@ export const AdminPage = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                   <Tooltip title="Manage dining halls">
                     <StorefrontIcon sx={{ fontSize: 40, mr: 2 }} />
@@ -215,6 +241,34 @@ export const AdminPage = () => {
                   onClick={() => navigate("/admin/dining-halls")}
                 >
                   Manage Dining Halls
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                  <Tooltip title="Download meals data">
+                    <DownloadIcon sx={{ fontSize: 40, mr: 2 }} />
+                  </Tooltip>
+                  <Typography variant="h5" component="h2">
+                    Download Meals
+                  </Typography>
+                </Box>
+                <Typography variant="body1" color="text.secondary">
+                  Download all meals data as a JSON file, sorted by dining hall.
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={handleDownloadMeals}
+                  disabled={isDownloading}
+                >
+                  {isDownloading ? "Downloading..." : "Download JSON"}
                 </Button>
               </CardActions>
             </Card>
