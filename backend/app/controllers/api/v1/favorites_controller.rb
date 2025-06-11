@@ -4,7 +4,7 @@ class Api::V1::FavoritesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    favorites = current_user.favorites.includes(:user)
+    favorites = current_user.favorites.includes(:meal)
     render json: favorites.map { |favorite|
       {
         id: favorite.id,
@@ -15,7 +15,18 @@ class Api::V1::FavoritesController < ApplicationController
   end
 
   def create
-    favorite = current_user.favorites.build(favorite_params)
+    # Find meal by name first
+    meal = Meal.find_by(name: params[:favorite][:meal_name])
+    
+    if meal.nil?
+      render json: {
+        message: 'Meal not found',
+        errors: ['The specified meal does not exist']
+      }, status: :not_found
+      return
+    end
+    
+    favorite = current_user.favorites.build(meal_id: meal.id)
     
     if favorite.save
       render json: {
