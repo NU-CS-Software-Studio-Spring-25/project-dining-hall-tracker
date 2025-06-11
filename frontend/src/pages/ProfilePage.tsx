@@ -235,9 +235,9 @@ export const ProfilePage = () => {
                   <TableRow
                     key={`today-${meal.id}`}
                     sx={{
-                      bgcolor: "success.light",
-                      "&:hover": { bgcolor: "success.main" },
-                      "& td": { color: "success.contrastText" },
+                      bgcolor: "secondary.light",
+                      "&:hover": { bgcolor: "secondary.main" },
+                      "& td": { color: "black" },
                     }}
                   >
                     <TableCell>
