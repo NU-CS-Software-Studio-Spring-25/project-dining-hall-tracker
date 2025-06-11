@@ -1,0 +1,16 @@
+title: Northwestern Dining Hall Tracker API Documentation
+main_page: README.md
+exclude:
+  - test
+  - spec  
+  - features
+  - node_modules
+  - vendor
+  - tmp
+  - log
+  - storage
+  - public
+  - bin
+  - db/migrate
+  - config/initializers
+markup: markdown
