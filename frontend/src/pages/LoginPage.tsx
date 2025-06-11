@@ -93,6 +93,11 @@ export const LoginPage = () => {
                 Sign up here
               </Link>
             </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              <Link to="/forgot-password" style={{ textDecoration: "none" }}>
+                Forgot your password?
+              </Link>
+            </Typography>
           </Box>
         </Box>
       </Paper>

@@ -14,6 +14,8 @@ import { AdminPage } from './pages/AdminPage'
 import { AdminMealsPage } from './pages/AdminMealsPage'
 import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SignupPage'
+import { ForgotPasswordPage } from './pages/ForgotPasswordPage'
+import { ResetPasswordPage } from './pages/ResetPasswordPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { NotFound } from './pages/NotFound'
 import './App.css'
@@ -266,6 +268,8 @@ const AppContent = () => {
               </ProtectedRoute>
             } 
           />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

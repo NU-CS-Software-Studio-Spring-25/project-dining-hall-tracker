@@ -12,6 +12,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   signup: (email: string, password: string, passwordConfirmation: string) => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<void>;
+  resetPassword: (token: string, password: string, passwordConfirmation: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -184,12 +186,94 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const requestPasswordReset = async (email: string) => {
+    try {
+      const apiUrl = import.meta.env.PROD 
+        ? '/users/password' 
+        : 'http://localhost:3000/users/password';
+        
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          user: {
+            email,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        // Success - password reset email sent
+        return;
+      } else {
+        let errorMessage = 'Failed to send password reset email';
+        try {
+          const data = await response.json();
+          errorMessage = data.message || data.errors?.join(', ') || errorMessage;
+        } catch {
+          // If JSON parsing fails, use default error message
+        }
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('Password reset request error:', error);
+      throw error;
+    }
+  };
+
+  const resetPassword = async (token: string, password: string, passwordConfirmation: string) => {
+    try {
+      const apiUrl = import.meta.env.PROD 
+        ? '/users/password' 
+        : 'http://localhost:3000/users/password';
+        
+      const response = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          user: {
+            reset_password_token: token,
+            password,
+            password_confirmation: passwordConfirmation,
+          },
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      } else {
+        let errorMessage = 'Failed to reset password';
+        try {
+          const data = await response.json();
+          errorMessage = data.message || data.errors?.join(', ') || errorMessage;
+        } catch {
+          // If JSON parsing fails, use default error message
+        }
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('Password reset error:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     isLoading,
     login,
     logout,
     signup,
+    requestPasswordReset,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
