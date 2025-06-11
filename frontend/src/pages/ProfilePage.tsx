@@ -96,7 +96,7 @@ export const ProfilePage = () => {
 
       <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
-          Favorite Meals ({favorites.length})
+          Favorite Meals ({favorites.length}/20)  
         </Typography>
 
         {isLoading || loadingMeals ? (
