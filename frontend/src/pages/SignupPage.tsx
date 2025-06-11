@@ -7,9 +7,13 @@ import {
   Typography,
   Box,
   Alert,
+  Chip,
+  Stack,
 } from "@mui/material";
+import { CheckCircle, Cancel } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 export const SignupPage = () => {
   const [email, setEmail] = useState("");
@@ -18,14 +22,34 @@ export const SignupPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
+  const { showSuccess, showError } = useNotification();
   const navigate = useNavigate();
+
+  // Password validation helpers
+  const passwordRequirements = {
+    minLength: password.length >= 7,
+    hasCapital: /[A-Z]/.test(password),
+    passwordsMatch: password === passwordConfirmation && password !== "",
+  };
+
+  const isPasswordValid = passwordRequirements.minLength && passwordRequirements.hasCapital;
+  const canSubmit = isPasswordValid && passwordRequirements.passwordsMatch && email !== "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     if (password !== passwordConfirmation) {
-      setError("Passwords do not match");
+      const errorMessage = "Passwords do not match";
+      setError(errorMessage);
+      showError(errorMessage);
+      return;
+    }
+
+    if (!isPasswordValid) {
+      const errorMessage = "Please ensure your password meets all requirements";
+      setError(errorMessage);
+      showError(errorMessage);
       return;
     }
 
@@ -33,9 +57,12 @@ export const SignupPage = () => {
 
     try {
       await signup(email, password, passwordConfirmation);
+      showSuccess("Account created successfully! Welcome to PurplePlate!");
       navigate("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Signup failed");
+      const errorMessage = err instanceof Error ? err.message : "Signup failed";
+      setError(errorMessage);
+      showError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -78,6 +105,30 @@ export const SignupPage = () => {
             inputProps={{ maxLength: 255 }}
           />
 
+          {password && (
+            <Box sx={{ mt: 1, mb: 2 }}>
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                Password Requirements:
+              </Typography>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Chip
+                  icon={passwordRequirements.minLength ? <CheckCircle /> : <Cancel />}
+                  label="At least 7 characters"
+                  color={passwordRequirements.minLength ? "success" : "error"}
+                  variant={passwordRequirements.minLength ? "filled" : "outlined"}
+                  size="small"
+                />
+                <Chip
+                  icon={passwordRequirements.hasCapital ? <CheckCircle /> : <Cancel />}
+                  label="One capital letter"
+                  color={passwordRequirements.hasCapital ? "success" : "error"}
+                  variant={passwordRequirements.hasCapital ? "filled" : "outlined"}
+                  size="small"
+                />
+              </Stack>
+            </Box>
+          )}
+
           <TextField
             fullWidth
             label="Confirm Password"
@@ -87,13 +138,19 @@ export const SignupPage = () => {
             margin="normal"
             required
             inputProps={{ maxLength: 255 }}
+            error={passwordConfirmation !== "" && !passwordRequirements.passwordsMatch}
+            helperText={
+              passwordConfirmation !== "" && !passwordRequirements.passwordsMatch
+                ? "Passwords do not match"
+                : ""
+            }
           />
 
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            disabled={loading}
+            disabled={loading || !canSubmit}
             sx={{ mt: 3, mb: 2 }}
           >
             {loading ? "Creating Account..." : "Sign Up"}

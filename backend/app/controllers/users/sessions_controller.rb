@@ -4,17 +4,22 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    self.resource = warden.authenticate!(auth_options)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
+    resource = User.find_by(email: params[:user][:email])
     
-    render json: {
-      message: 'Logged in successfully',
-      user: {
-        id: resource.id,
-        email: resource.email
-      }
-    }, status: :ok
+    if resource&.valid_password?(params[:user][:password])
+      sign_in(resource_name, resource)
+      render json: {
+        message: 'Logged in successfully',
+        user: {
+          id: resource.id,
+          email: resource.email
+        }
+      }, status: :ok
+    else
+      render json: {
+        message: 'Invalid email or password'
+      }, status: :unauthorized
+    end
   end
 
   def destroy
@@ -41,5 +46,22 @@ class Users::SessionsController < Devise::SessionsController
     render json: {
       message: 'Logged out successfully'
     }, status: :ok
+  end
+
+  # Handle authentication failures
+  def respond_to_on_create
+    if resource.persisted?
+      render json: {
+        message: 'Logged in successfully',
+        user: {
+          id: resource.id,
+          email: resource.email
+        }
+      }, status: :ok
+    else
+      render json: {
+        message: 'Invalid email or password'
+      }, status: :unauthorized
+    end
   end
 end

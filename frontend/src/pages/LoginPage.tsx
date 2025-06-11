@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useNotification } from "../contexts/NotificationContext";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export const LoginPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { showSuccess, showError } = useNotification();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,9 +28,12 @@ export const LoginPage = () => {
 
     try {
       await login(email, password);
+      showSuccess("Signed in successfully!");
       navigate("/");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      const errorMessage = err instanceof Error ? err.message : "Login failed";
+      setError(errorMessage);
+      showError(errorMessage);
     } finally {
       setLoading(false);
     }
