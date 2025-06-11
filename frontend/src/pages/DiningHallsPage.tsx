@@ -51,7 +51,7 @@ export const DiningHallsPage = () => {
     useState<DiningHall | null>(null);
 
   const { user } = useAuth();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { isFavorite, toggleFavorite, favorites } = useFavorites();
 
   const handleFavoriteClick = async (mealName: string) => {
     if (!user) {
@@ -187,14 +187,25 @@ export const DiningHallsPage = () => {
                             {meal.name}
                           </Typography>
                           {user && (
-                            <Tooltip title={isFavorite(meal.name) ? "Remove from favorites" : "Add to favorites"}>
-                              <IconButton
-                                onClick={() => handleFavoriteClick(meal.name)}
-                                color="primary"
-                                size="small"
-                              >
-                                {isFavorite(meal.name) ? <Star /> : <StarBorder />}
-                              </IconButton>
+                            <Tooltip 
+                              title={
+                                isFavorite(meal.name)
+                                  ? "Remove from favorites"
+                                  : favorites.length >= 20
+                                  ? "You can only have up to 20 favorite meals"
+                                  : "Add to favorites"
+                              }
+                            >
+                              <span>
+                                <IconButton
+                                  onClick={() => handleFavoriteClick(meal.name)}
+                                  color="primary"
+                                  size="small"
+                                  disabled={!isFavorite(meal.name) && favorites.length >= 20}
+                                >
+                                  {isFavorite(meal.name) ? <Star /> : <StarBorder />}
+                                </IconButton>
+                              </span>
                             </Tooltip>
                           )}
                         </Box>

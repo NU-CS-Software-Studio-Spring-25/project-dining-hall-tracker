@@ -86,6 +86,12 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
   const addFavorite = async (mealName: string) => {
     if (!user) return;
 
+    // Check if we've reached the limit
+    if (favorites.length >= 20) {
+      showError("You can only have up to 20 favorite meals. Please remove some favorites before adding new ones.");
+      return;
+    }
+
     try {
       const baseUrl = getBaseUrl();
       const response = await fetch(`${baseUrl}/api/v1/favorites`, {

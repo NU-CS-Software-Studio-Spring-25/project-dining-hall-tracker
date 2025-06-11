@@ -36,7 +36,7 @@ export const MealsPage = () => {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const { user } = useAuth();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { isFavorite, toggleFavorite, favorites } = useFavorites();
 
   // State for filtering
   const [filter, setFilter] = useState<NutrientFilterParams>({
@@ -393,16 +393,21 @@ export const MealsPage = () => {
                           title={
                             isFavorite(meal.name)
                               ? "Remove from favorites"
+                              : favorites.length >= 20
+                              ? "You can only have up to 20 favorite meals"
                               : "Add to favorites"
                           }
                         >
-                          <IconButton
-                            onClick={() => handleFavoriteClick(meal.name)}
-                            color="primary"
-                            size="small"
-                          >
-                            {isFavorite(meal.name) ? <Star /> : <StarBorder />}
-                          </IconButton>
+                          <span>
+                            <IconButton
+                              onClick={() => handleFavoriteClick(meal.name)}
+                              color="primary"
+                              size="small"
+                              disabled={!isFavorite(meal.name) && favorites.length >= 20}
+                            >
+                              {isFavorite(meal.name) ? <Star /> : <StarBorder />}
+                            </IconButton>
+                          </span>
                         </Tooltip>
                       </TableCell>
                     )}
