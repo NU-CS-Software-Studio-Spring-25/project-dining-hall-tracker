@@ -243,12 +243,22 @@ export const MealsPage = () => {
 
           <TextField
             label="Minimum Amount"
-            type="number"
-            inputProps={{ min: 0, maxLength: 6 }}
+            type="text"
+            inputProps={{ 
+              min: 0,
+              inputMode: "numeric",
+              pattern: "[0-9]*"
+            }}
             value={filter.amount}
-            onChange={(e) =>
-              setFilter({ ...filter, amount: Number(e.target.value) })
-            }
+            onChange={(e) => {
+              const value = e.target.value;
+              // Only allow digits
+              if (/^\d*$/.test(value) && value.length <= 7) {
+                // Remove leading zeros and convert to number
+                const cleanValue = value.replace(/^0+/, '') || '0';
+                setFilter({ ...filter, amount: Number(cleanValue) });
+              }
+            }}
           />
 
           <Tooltip title="Apply the selected nutritional filter to search for meals">
