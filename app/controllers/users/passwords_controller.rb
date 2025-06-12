@@ -9,7 +9,7 @@ class Users::PasswordsController < Devise::PasswordsController
     yield resource if block_given?
 
     if successfully_sent?(resource)
-      if request.format.json?
+      if is_api_request?
         render json: {
           message: 'If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.'
         }, status: :ok
@@ -18,7 +18,7 @@ class Users::PasswordsController < Devise::PasswordsController
         redirect_to root_path, notice: 'If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.'
       end
     else
-      if request.format.json?
+      if is_api_request?
         render json: {
           message: 'Unable to send password reset instructions',
           errors: resource.errors.full_messages
@@ -36,7 +36,7 @@ class Users::PasswordsController < Devise::PasswordsController
     set_minimum_password_length
     resource.reset_password_token = params[:reset_password_token]
     
-    if request.format.json?
+    if is_api_request?
       # For API, just return the token validation
       render json: {
         message: 'Reset token is valid',
@@ -62,7 +62,7 @@ class Users::PasswordsController < Devise::PasswordsController
         sign_in(resource_name, resource)
       end
       
-      if request.format.json?
+      if is_api_request?
         render json: {
           message: 'Your password has been changed successfully. You are now signed in.',
           user: {
@@ -75,7 +75,7 @@ class Users::PasswordsController < Devise::PasswordsController
       end
     else
       set_minimum_password_length
-      if request.format.json?
+      if is_api_request?
         render json: {
           message: 'Unable to reset password',
           errors: resource.errors.full_messages
@@ -102,5 +102,13 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def resource_params
     params.require(:user).permit(:email, :password, :password_confirmation, :reset_password_token)
+  end
+
+  def is_api_request?
+    # Check if this is an API request by looking at the Accept header and content type
+    request.xhr? || 
+    request.headers['Accept']&.include?('application/json') ||
+    request.content_type&.include?('application/json') ||
+    params[:format] == 'json'
   end
 end 
