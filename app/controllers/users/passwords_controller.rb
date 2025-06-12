@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Users::PasswordsController < Devise::PasswordsController
-  respond_to :json, :html
 
   # POST /users/password
   def create
@@ -32,10 +31,9 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # GET /users/password/edit?reset_password_token=abcdef
   def edit
-    # For the edit action (password reset links from email), always redirect to frontend
-    # unless it's explicitly an API call with JSON format
-    if params[:format] == 'json' || request.xhr?
-      # Only return JSON for explicit API calls
+    # For password reset links from email, always redirect to frontend unless explicitly JSON
+    if params[:format] == 'json'
+      # Only return JSON for explicit JSON format requests
       self.resource = resource_class.new
       set_minimum_password_length
       resource.reset_password_token = params[:reset_password_token]
@@ -45,7 +43,7 @@ class Users::PasswordsController < Devise::PasswordsController
         reset_password_token: params[:reset_password_token]
       }, status: :ok
     else
-      # For all other requests (including email links), redirect to frontend
+      # For all other requests (including email links and wildcard formats), redirect to frontend
       redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}"
     end
   end
