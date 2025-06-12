@@ -106,8 +106,15 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def is_api_request?
     # Check if this is an API request by looking at the Accept header and content type
+    # If HTML is explicitly requested, it's a browser request
+    accept_header = request.headers['Accept'].to_s
+    
+    # Prioritize HTML requests - if HTML is explicitly accepted, treat as browser request
+    return false if accept_header.include?('text/html')
+    
+    # Otherwise check for explicit JSON API indicators
     request.xhr? || 
-    request.headers['Accept']&.include?('application/json') ||
+    accept_header.include?('application/json') ||
     request.content_type&.include?('application/json') ||
     params[:format] == 'json'
   end
