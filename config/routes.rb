@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   # Health check route
   get '/api/health', to: 'health#check'
 
+  # OVERRIDE: Direct password reset route to bypass Devise completely
+  get '/users/password/edit', to: 'users/passwords#edit'
+
   # Devise routes for user authentication with custom controllers
   devise_for :users, 
     controllers: {
