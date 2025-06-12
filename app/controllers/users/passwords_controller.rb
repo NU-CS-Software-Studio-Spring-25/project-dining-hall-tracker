@@ -32,18 +32,20 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # GET /users/password/edit?reset_password_token=abcdef
   def edit
-    self.resource = resource_class.new
-    set_minimum_password_length
-    resource.reset_password_token = params[:reset_password_token]
-    
-    if is_api_request?
-      # For API, just return the token validation
+    # For the edit action (password reset links from email), always redirect to frontend
+    # unless it's explicitly an API call with JSON format
+    if params[:format] == 'json' || request.xhr?
+      # Only return JSON for explicit API calls
+      self.resource = resource_class.new
+      set_minimum_password_length
+      resource.reset_password_token = params[:reset_password_token]
+      
       render json: {
         message: 'Reset token is valid',
         reset_password_token: params[:reset_password_token]
       }, status: :ok
     else
-      # For web requests, redirect to frontend with token
+      # For all other requests (including email links), redirect to frontend
       redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}"
     end
   end
