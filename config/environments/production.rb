@@ -55,7 +55,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: ENV['HOST'] || 'dining-finder-app.herokuapp.com' }
+  config.action_mailer.default_url_options = { host: ENV['HOST'] || 'dining-finder-app-2ddcb907b75f.herokuapp.com' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
