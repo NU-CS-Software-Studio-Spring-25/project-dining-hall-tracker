@@ -31,27 +31,8 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # GET /users/password/edit?reset_password_token=abcdef
   def edit
-    # Log debugging information
-    Rails.logger.info "PASSWORD RESET DEBUG: params[:format] = #{params[:format].inspect}"
-    Rails.logger.info "PASSWORD RESET DEBUG: request.xhr? = #{request.xhr?.inspect}"
-    
-    # For password reset links from email, always redirect to frontend unless explicitly JSON
-    if params[:format] == 'json'
-      Rails.logger.info "PASSWORD RESET DEBUG: Returning JSON response"
-      # Only return JSON for explicit JSON format requests
-      self.resource = resource_class.new
-      set_minimum_password_length
-      resource.reset_password_token = params[:reset_password_token]
-      
-      render json: {
-        message: 'Reset token is valid',
-        reset_password_token: params[:reset_password_token]
-      }, status: :ok
-    else
-      Rails.logger.info "PASSWORD RESET DEBUG: Redirecting to frontend"
-      # For all other requests (including email links and wildcard formats), redirect to frontend
-      redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}"
-    end
+    # Force redirect to frontend for ALL requests - no conditions
+    redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}", status: 302
   end
 
   # PUT /users/password
