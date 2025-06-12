@@ -31,12 +31,9 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # GET /users/password/edit?reset_password_token=abcdef
   def edit
-    # Force redirect to frontend for ALL requests - no conditions
-    respond_to do |format|
-      format.html { redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}" }
-      format.json { redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}" }
-      format.any { redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}" }
-    end
+    # Bypass all Devise logic and force redirect
+    redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}", status: 302, allow_other_host: false
+    return
   end
 
   # PUT /users/password
