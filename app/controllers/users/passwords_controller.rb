@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Users::PasswordsController < Devise::PasswordsController
+  before_action :redirect_edit_to_frontend, only: [:edit]
 
   # POST /users/password
   def create
@@ -31,9 +32,8 @@ class Users::PasswordsController < Devise::PasswordsController
 
   # GET /users/password/edit?reset_password_token=abcdef
   def edit
-    # Immediate redirect without any Devise processing
-    redirect_to("/reset-password?reset_password_token=#{params[:reset_password_token]}")
-    return false
+    # This should be intercepted by before_action
+    super
   end
 
   # PUT /users/password
@@ -87,6 +87,11 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   private
+
+  def redirect_edit_to_frontend
+    redirect_to "/reset-password?reset_password_token=#{params[:reset_password_token]}"
+    return false
+  end
 
   def resource_params
     params.require(:user).permit(:email, :password, :password_confirmation, :reset_password_token)
