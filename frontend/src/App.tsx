@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { ThemeProvider, createTheme, CssBaseline, Alert, Snackbar, Container, Box, CircularProgress, Typography } from '@mui/material'
 import { api } from './services/api'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
@@ -223,6 +223,30 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Password Reset URL Handler - detects Rails password reset URLs and redirects to frontend
+const PasswordResetRedirect = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if current URL is the Rails password reset edit URL
+    if (location.pathname === '/users/password/edit') {
+      const urlParams = new URLSearchParams(location.search);
+      const resetToken = urlParams.get('reset_password_token');
+      
+      if (resetToken) {
+        // Redirect to our frontend reset password page
+        navigate(`/reset-password?reset_password_token=${resetToken}`, { replace: true });
+      } else {
+        // No token, redirect to forgot password page
+        navigate('/forgot-password', { replace: true });
+      }
+    }
+  }, [location, navigate]);
+
+  return null; // This component doesn't render anything
+};
+
 // Loading wrapper to handle auth initialization
 const AppContent = () => {
   const { isLoading } = useAuth();
@@ -250,6 +274,7 @@ const AppContent = () => {
 
   return (
     <>
+      <PasswordResetRedirect />
       <NavBar />
       <main style={{ flex: 1 }}>
         <Routes>
@@ -270,6 +295,7 @@ const AppContent = () => {
           />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/users/password/edit" element={<ResetPasswordPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
